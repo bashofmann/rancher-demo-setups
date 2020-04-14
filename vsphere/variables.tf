@@ -93,6 +93,16 @@ variable "node_memory_mb" {
   default = "4096"
 }
 
+// Number of vCPUs to assign to worker nodes
+variable "node_num_cpus_worker" {
+  default = "4"
+}
+
+// Memory size in MB to assign to worker nodes
+variable "node_memory_mb_worker" {
+  default = "16384"
+}
+
 // Docker version to install on VMs
 variable "docker_version" {
   default = "19.03"

@@ -21,3 +21,14 @@ provider "rancher2" {
   insecure = true
   bootstrap = true
 }
+
+# Rancher2 administration provider
+provider "rancher2" {
+  version = "~> 1.7"
+
+  alias = "admin"
+
+  api_url  = "https://${digitalocean_record.rancher.fqdn}"
+  insecure = true
+  token_key = rancher2_bootstrap.admin.token
+}
