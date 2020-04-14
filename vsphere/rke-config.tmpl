@@ -1,0 +1,14 @@
+nodes:
+%{ for addr in ip_addrs ~}
+  - address: ${addr} 
+    user: ubuntu
+    role: [controlplane,worker,etcd]
+%{ endfor ~}
+
+kubernetes_version: ${kubernetes_version}
+
+services:
+  etcd:
+    backup_config:
+      interval_hours: 12
+      retention: 6
