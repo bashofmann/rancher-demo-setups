@@ -1,6 +1,6 @@
 resource "rancher2_cluster" "demo" {
   name = "demo"
-  description = "Cluster for demostructure components"
+  description = "Cluster for demos"
   depends_on = [
     rancher2_bootstrap.admin
   ]
@@ -21,8 +21,8 @@ resource "rancher2_cluster" "demo" {
       max_unavailable_worker = "20%"
     }
   }
-  enable_cluster_alerting = true
   enable_cluster_monitoring = true
+  enable_cluster_istio = true
   scheduled_cluster_scan {
     enabled = true
     scan_config {

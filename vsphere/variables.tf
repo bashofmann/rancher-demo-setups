@@ -150,6 +150,10 @@ variable "ssh_key_file_name" {
   default     = "~/.ssh/id_rsa"
 }
 
+variable "k3s_token" {
+  type = string
+}
+
 # Local variables used to reduce repetition
 locals {
   node_username = "ubuntu"
