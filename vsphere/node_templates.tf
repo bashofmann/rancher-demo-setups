@@ -30,7 +30,6 @@ resource "rancher2_node_template" "controlplane" {
     ]
     cpu_count = var.node_num_cpus
     memory_size = var.node_memory_mb
-    cloud_config = file("${path.module}/userdata/cloud-init.yaml")
     cfgparam = [
       "disk.enableUUID=TRUE"
     ]
@@ -55,7 +54,6 @@ resource "rancher2_node_template" "worker" {
     ]
     cpu_count = var.node_num_cpus_worker
     memory_size = var.node_memory_mb_worker
-    cloud_config = file("${path.module}/userdata/cloud-init.yaml")
     cfgparam = [
       "disk.enableUUID=TRUE"
     ]

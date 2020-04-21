@@ -2,11 +2,6 @@
 
 set -xe
 
-apt-get update
-apt-get install -y resolvconf
-echo "nameserver 8.8.8.8" > /etc/resolvconf/resolv.conf.d/head
-resolvconf -u
-
 export K3S_TOKEN='${k3s_token}'
 %{ if k3s_url != "" }
 export K3S_URL='${k3s_url}'
