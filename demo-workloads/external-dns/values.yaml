@@ -1,0 +1,17 @@
+sources:
+  - service
+  - ingress
+
+provider: digitalocean
+
+domainFilters:
+  - plgrnd.be
+interval: "1m"
+registry: "txt"
+policy: sync
+resources:
+  limits:
+    memory: 50Mi
+  requests:
+    memory: 50Mi
+    cpu: 10m

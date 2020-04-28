@@ -1,11 +1,8 @@
 ## Module to render template file ##
 resource "local_file" "rke_configuration" {
-  depends_on = [
-    vsphere_virtual_machine.rancher_server
-  ]
-  filename = "${path.module}/rke-rendered.yml"
+  filename = "${var.output_dir}/rke-rendered.yml"
   content = templatefile("${path.module}/rke-config.tmpl", {
-    ip_addrs = vsphere_virtual_machine.rancher_server[*].default_ip_address
+    nodes = var.nodes
     kubernetes_version = var.rke_kubernetes_version
   })
 }

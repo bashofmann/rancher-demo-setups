@@ -33,48 +33,21 @@ variable "digitalocean_token" {
 # Rancher Configuration
 #-----------------------------------------#
 
-// Used for Let's Encrypt registration
+variable "prefix" {
+  type        = string
+  description = "Prefix added to names of all resources"
+  default     = "bhofmann"
+}
+
 variable "email" {
   type = string
 }
-
-variable "cert_manager_version" {
-  type = string
-}
-
-variable "rke_kubernetes_version" {
-  type        = string
-  description = "Kubernetes version to use for Rancher server RKE cluster"
-  default     = "v1.17.4-rancher1-3"
-}
-
-# Number of nodes to create for the first cluster
-variable "rancher_num_cluster_nodes" {
-  default = 3
-}
-
-variable "cluster_nodes_name_prefix" {
-  type = string
-}
-
-variable "rancher_domain" {
-  type        = string
-  description = "DNS domain for rancher"
-}
-
-variable "rancher_subdomain" {
-  type        = string
-  description = "DNS sub domain for rancher"
-}
-
-variable "rancher_version" {
-  type = string
-}
-
 variable "rancher_admin_password" {
   type = string
 }
-
+variable "rancher_subdomain" {
+  type = string
+}
 #-----------------------------------------#
 # Node Configuration
 #-----------------------------------------#
@@ -103,11 +76,16 @@ variable "node_memory_mb_worker" {
   default = "16384"
 }
 
-// Docker version to install on VMs
 variable "docker_version" {
-  default = "19.03"
+  type        = string
+  description = "Docker version to install on nodes"
+  default     = "19.03"
 }
 
+# Number of nodes to create for the first cluster
+variable "rancher_server_cluster_nodes" {
+  default = 3
+}
 #-----------------------------------------#
 # vSphere Resource Configuration
 #-----------------------------------------#
@@ -119,13 +97,13 @@ variable "vsphere_datacenter" {
 
 # vSphere cluster to use (required unless vsphere_resource_pool is specified)
 variable "vsphere_cluster" {
-  type = string
+  type    = string
   default = ""
 }
 
 # vSphere resource pool to use (required unless vsphere_cluster is specified)
 variable "vsphere_resource_pool" {
-  type = string
+  type    = string
   default = ""
 }
 
@@ -148,10 +126,6 @@ variable "ssh_key_file_name" {
   type        = string
   description = "File path and name of SSH private key used for infrastructure and RKE"
   default     = "~/.ssh/id_rsa"
-}
-
-variable "k3s_token" {
-  type = string
 }
 
 # Local variables used to reduce repetition

@@ -1,6 +1,7 @@
 nodes:
-%{ for addr in ip_addrs ~}
-  - address: ${addr} 
+%{ for node in nodes ~}
+  - address: ${node.public_ip}
+    internal_address: ${node.private_ip}
     user: ubuntu
     role: [controlplane,worker,etcd]
 %{ endfor ~}

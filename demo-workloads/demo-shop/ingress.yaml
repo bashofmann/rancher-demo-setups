@@ -1,0 +1,19 @@
+kind: Ingress
+apiVersion: networking.k8s.io/v1beta1
+metadata:
+  name: demo-shop
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+    - hosts:
+        - demo-shop.${INGRESS_BASE_DOMAIN}
+      secretName: demo-shop-tls
+  rules:
+    - host: demo-shop.${INGRESS_BASE_DOMAIN}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: frontend
+              servicePort: 80

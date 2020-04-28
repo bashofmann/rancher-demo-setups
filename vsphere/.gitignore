@@ -1,3 +1,0 @@
-*.rkestate
-rke-rendered.yml
-kube_config*

@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: rancher-demo
+  namespace: default
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  tls:
+    - hosts:
+        - rancher-demo.${INGRESS_BASE_DOMAIN}
+      secretName: rancher-demo-tls
+  rules:
+  - host: rancher-demo.${INGRESS_BASE_DOMAIN}
+    http:
+      paths:
+      - backend:
+          serviceName: rancher-demo
+          servicePort: 80
+        path: /

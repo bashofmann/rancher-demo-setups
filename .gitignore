@@ -13,3 +13,7 @@ terraform.tfvars
 
 # vagrant state directory
 .vagrant
+
+*.rkestate
+rke-rendered.yml
+kube_config*

@@ -5,14 +5,14 @@ data "vsphere_virtual_machine" "ubuntu" {
 
 # Creates and provisions VMs for the cluster
 resource "vsphere_virtual_machine" "rancher_server" {
-  count            = var.rancher_num_cluster_nodes
-  name             = "${var.cluster_nodes_name_prefix}-${count.index}"
+  count            = var.rancher_server_cluster_nodes
+  name             = "${var.prefix}-${count.index}"
   resource_pool_id = data.vsphere_resource_pool.pool.id
   datastore_id     = data.vsphere_datastore.datastore.id
 
-  num_cpus  = var.node_num_cpus
-  memory    = var.node_memory_mb
-  guest_id  = data.vsphere_virtual_machine.ubuntu.guest_id
+  num_cpus = var.node_num_cpus
+  memory   = var.node_memory_mb
+  guest_id = data.vsphere_virtual_machine.ubuntu.guest_id
 
   scsi_type = data.vsphere_virtual_machine.ubuntu.scsi_type
 
@@ -38,12 +38,12 @@ resource "vsphere_virtual_machine" "rancher_server" {
 
   vapp {
     properties = {
-      hostname = "${var.cluster_nodes_name_prefix}-${count.index}"
+      hostname    = "${var.prefix}-${count.index}"
       public-keys = trimspace(file("${var.ssh_key_file_name}.pub"))
-      user-data = base64encode(templatefile("userdata/server.sh", {
-          docker_version = var.docker_version
-          username       = local.node_username
-        }))
+      user-data = base64encode(templatefile("../userdata/server.sh", {
+        docker_version = var.docker_version
+        username       = local.node_username
+      }))
     }
   }
 
