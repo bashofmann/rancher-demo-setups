@@ -1,5 +1,5 @@
 resource "rancher2_cloud_credential" "aws" {
-  name = "aws"
+  name = "${var.prefix}-aws"
 
   amazonec2_credential_config {
     access_key = var.aws_access_key
@@ -8,7 +8,7 @@ resource "rancher2_cloud_credential" "aws" {
 }
 
 resource "rancher2_node_template" "controlplane" {
-  name        = "controlplane"
+  name        = "${var.prefix}-aws-controlplane"
   description = "Template for control plane nodes"
 
   cloud_credential_id = rancher2_cloud_credential.aws.id
@@ -21,12 +21,13 @@ resource "rancher2_node_template" "controlplane" {
     vpc_id         = var.aws_vpc_id
     zone           = var.aws_zone
     root_size      = "10"
-    instance_type  = "t2.small"
+    instance_type  = "t2.medium"
+    iam_instance_profile = "RancherK8SUnrestrictedCloudProviderRoleEU"
   }
 }
 
 resource "rancher2_node_template" "worker" {
-  name        = "worker"
+  name        = "${var.prefix}-aws-worker"
   description = "Template for worker nodes"
 
   cloud_credential_id = rancher2_cloud_credential.aws.id
@@ -40,5 +41,6 @@ resource "rancher2_node_template" "worker" {
     zone           = var.aws_zone
     root_size      = "20"
     instance_type  = "t2.xlarge"
+    iam_instance_profile = "RancherK8SUnrestrictedCloudProviderRoleEU"
   }
 }

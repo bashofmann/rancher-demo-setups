@@ -33,7 +33,7 @@ resource "vsphere_virtual_machine" "k3s_server" {
     properties = {
       hostname = "${var.cluster_nodes_name_prefix}-k3s-server"
       public-keys = trimspace(file("${var.ssh_key_file_name}.pub"))
-      user-data = base64encode(templatefile("../userdata/k3s.sh", {
+      user-data = base64encode(templatefile("../../userdata/k3s.sh", {
           docker_version = var.docker_version
           username       = local.node_username
           k3s_token      = var.k3s_token

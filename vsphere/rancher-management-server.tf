@@ -1,5 +1,5 @@
 module "rancher-server" {
-  source = "../rancher-server"
+  source = "../modules/rancher-server"
 
   nodes                  = vsphere_virtual_machine.rancher_server
   dns_record_type        = "A"
@@ -12,7 +12,7 @@ module "rancher-server" {
 }
 
 module "rancher-setup" {
-  source                = "../rancher-setup-vsphere"
+  source                = "../modules/rancher-setup-vsphere"
   rancher_url           = module.rancher-server.rancher_url
   rancher_admin_token   = module.rancher-server.rancher_admin_token
   vm_template_name      = var.vm_template_name

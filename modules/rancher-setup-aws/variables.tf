@@ -3,6 +3,15 @@ variable "rancher_url" {
 }
 variable "rancher_admin_token" {
   type = string
+  default = null
+}
+variable "rancher_access_key" {
+  type = string
+  default = null
+}
+variable "rancher_secret_key" {
+  type = string
+  default = null
 }
 
 # Required
@@ -29,4 +38,8 @@ variable "aws_subnet_id" {
 variable "aws_vpc_id" {
 }
 variable "aws_zone" {
+}
+variable "prefix" {
+  type    = string
+  default = "bhofmann"
 }

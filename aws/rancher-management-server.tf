@@ -1,5 +1,5 @@
 module "rancher-server" {
-  source = "../rancher-server"
+  source = "../modules/rancher-server"
 
   nodes                  = aws_instance.rancher_server
   dns_record_type        = "CNAME"
@@ -12,7 +12,7 @@ module "rancher-server" {
 }
 
 module "rancher-setup" {
-  source              = "../rancher-setup-aws"
+  source              = "../modules/rancher-setup-aws"
   rancher_url         = module.rancher-server.rancher_url
   rancher_admin_token = module.rancher-server.rancher_admin_token
   aws_access_key      = var.aws_access_key

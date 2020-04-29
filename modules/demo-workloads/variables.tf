@@ -10,6 +10,9 @@ variable "dns_txt_owner_id" {
 variable "email" {
   type = string
 }
+variable "rancher_system_project_id" {
+  type = string
+}
 variable "ingress_base_domain" {
   type = string
 }

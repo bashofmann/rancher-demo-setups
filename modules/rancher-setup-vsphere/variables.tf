@@ -3,6 +3,15 @@ variable "rancher_url" {
 }
 variable "rancher_admin_token" {
   type = string
+  default = null
+}
+variable "rancher_access_key" {
+  type = string
+  default = null
+}
+variable "rancher_secret_key" {
+  type = string
+  default = null
 }
 
 variable "vm_template_name" {
