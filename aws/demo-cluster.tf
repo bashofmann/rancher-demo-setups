@@ -1,9 +1,9 @@
 module "demo-cluster-aws" {
-    source                       = "../modules/demo-cluster-aws"
-  rancher_url                  = module.rancher-server.rancher_url
-  rancher_admin_token          = module.rancher-server.rancher_admin_token
-    rke_kubernetes_version       = "v1.16.8-rancher1-3"
-    output_dir                   = abspath("${path.module}/out")
+  source                 = "../modules/demo-cluster-aws"
+  rancher_url            = module.rancher-server.rancher_url
+  rancher_admin_token    = module.rancher-server.rancher_admin_token
+  rke_kubernetes_version = "v1.16.9-rancher1-1"
+  output_dir             = abspath("${path.module}/out")
 }
 
 module "demo-cluster" {
@@ -18,11 +18,11 @@ module "demo-cluster" {
 }
 
 module "demo-workloads" {
-  source              = "../modules/demo-workloads"
-  digitalocean_token  = var.digitalocean_token
-  dns_txt_owner_id    = "rancher-demo-aws"
-  kubeconfig_demo     = module.demo-cluster-aws.kubeconfig
-  email               = var.email
-  ingress_base_domain = "rancher-aws.plgrnd.be"
+  source                    = "../modules/demo-workloads"
+  digitalocean_token        = var.digitalocean_token
+  dns_txt_owner_id          = "rancher-demo-aws"
+  kubeconfig_demo           = module.demo-cluster-aws.kubeconfig
+  email                     = var.email
+  ingress_base_domain       = "rancher-aws.plgrnd.be"
   rancher_system_project_id = module.demo-cluster.rancher_system_project_id
 }
