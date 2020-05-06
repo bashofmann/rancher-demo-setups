@@ -21,7 +21,7 @@ resource "rancher2_node_template" "controlplane" {
     vpc_id         = var.aws_vpc_id
     zone           = var.aws_zone
     root_size      = "10"
-    instance_type  = "t2.medium"
+    instance_type  = "t3a.medium"
     iam_instance_profile = "RancherK8SUnrestrictedCloudProviderRoleEU"
   }
 }
@@ -40,7 +40,7 @@ resource "rancher2_node_template" "worker" {
     vpc_id         = var.aws_vpc_id
     zone           = var.aws_zone
     root_size      = "20"
-    instance_type  = "t2.xlarge"
+    instance_type  = "t3a.xlarge"
     iam_instance_profile = "RancherK8SUnrestrictedCloudProviderRoleEU"
   }
 }
