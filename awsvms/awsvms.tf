@@ -28,7 +28,7 @@ resource "aws_security_group" "rancher_sg_allowall" {
 }
 
 resource "aws_instance" "k3s" {
-  count         = 3
+  count         = 2
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
 
@@ -37,6 +37,5 @@ resource "aws_instance" "k3s" {
 
   tags = {
     Name    = "${var.prefix}-k3s"
-    Creator = "rancher-quickstart"
   }
 }
