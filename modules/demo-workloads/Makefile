@@ -35,7 +35,9 @@ install-demo-shop:
 	cat demo-shop/ingress.yaml | envsubst | kubectl apply -n shop -f -
 
 install-rancher-demo:
-	cat rancher-demo/*.yaml | envsubst | kubectl apply -f -
+	cat rancher-demo/deployment.yaml | envsubst | kubectl apply -f -
+	cat rancher-demo/service.yaml | envsubst | kubectl apply -f -
+	cat rancher-demo/ingress.yaml | envsubst | kubectl apply -f -
 
 install-loki:
 	kubectl create namespace loki || true
