@@ -1,0 +1,47 @@
+nexusProxy:
+  enabled: false
+  env:
+    nexusDockerHost: nexus-registry.rancher-aws.plgrnd.be
+    nexusHttpHost: nexus.rancher-aws.plgrnd.be
+
+service:
+  enabled: true
+  type: ClusterIP
+  ports:
+    - name: docker
+      port: 5003
+      targetPort: 5003
+
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/proxy-body-size: 700m
+  rules:
+    - host: nexus-registry.rancher-aws.plgrnd.be
+      http:
+        paths:
+          - backend:
+              serviceName: sonatype-nexus-service
+              servicePort: 5003
+            path: /
+
+deploymentStrategy:
+  type: Recreate
+
+persistence:
+  enabled: true
+  storageSize: 8Gi
+
+resources:
+  requests:
+    cpu: 250m
+    # Based on https://support.sonatype.com/hc/en-us/articles/115006448847#mem
+    # and https://twitter.com/analytically/status/894592422382063616:
+    #   Xms == Xmx
+    #   Xmx <= 4G
+    #   MaxDirectMemory >= 2G
+    #   Xmx + MaxDirectMemory <= RAM * 2/3 (hence the request for 4800Mi)
+    #   MaxRAMFraction=1 is not being set as it would allow the heap
+    #     to use all the available memory.
+    memory: 4800Mi

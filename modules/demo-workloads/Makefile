@@ -1,10 +1,11 @@
-install: add-helm-repos install-sealed-secrets install-cert-manager install-external-dns install-demo-shop install-mysql-operator install-loki install-rio install-argocd helm-whatup
+install: add-helm-repos install-sealed-secrets install-cert-manager install-external-dns install-demo-shop install-rancher-demo install-mysql-operator install-loki install-rio install-argocd helm-whatup
 
 add-helm-repos:
 	helm repo add stable https://kubernetes-charts.storage.googleapis.com/
 	helm repo add jetstack https://charts.jetstack.io
 	helm repo add presslabs https://presslabs.github.io/charts
 	helm repo add loki https://grafana.github.io/loki/charts
+	helm repo add oteemo https://oteemo.github.io/charts/
 	helm repo update
 
 install-sealed-secrets:
@@ -57,6 +58,10 @@ install-argocd:
 	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 	cat argocd/ingress.yaml | envsubst | kubectl apply -f -
 
+install-nexus:
+	kubectl create namespace nexus || true
+	kubectl label namespace nexus field.cattle.io/projectId=p-4rfdw || true
+	helm upgrade --install nexus oteemo/sonatype-nexus --namespace nexus --version 2.1.0 -f nexus/values.yaml
 
 helm-whatup:
 #	helm whatup does not work with helm3 yet
