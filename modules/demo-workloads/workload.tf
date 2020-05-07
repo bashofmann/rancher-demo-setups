@@ -14,6 +14,7 @@ resource "null_resource" "workload" {
       ENCODED_DIGITALOCEAN_TOKEN = base64encode(var.digitalocean_token)
       DNS_TXT_OWNER_ID           = var.dns_txt_owner_id
       INGRESS_BASE_DOMAIN        = var.ingress_base_domain
+      CLUSTER_ID                 = var.cluster_id
       RANCHER_SYSTEM_PROJECT_ID  = var.rancher_system_project_id
     }
   }

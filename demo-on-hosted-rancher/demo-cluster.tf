@@ -26,5 +26,6 @@ module "demo-workloads" {
   kubeconfig_demo           = module.demo-cluster-aws.kubeconfig
   email                     = var.email
   ingress_base_domain       = "rancher-demo.plgrnd.be"
+  cluster_id                = module.demo-cluster.cluster_id
   rancher_system_project_id = module.demo-cluster.rancher_system_project_id
 }

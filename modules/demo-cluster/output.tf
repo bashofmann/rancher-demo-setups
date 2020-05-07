@@ -5,5 +5,9 @@ output "rancher_system_project_id" {
   value = local.rancher_system_project_id
 }
 output "cluster_id" {
+  depends_on = [
+    rancher2_namespace.shop,
+    rancher2_app.longhorn-system,
+  ]
   value = rancher2_cluster_sync.demo.cluster_id
 }

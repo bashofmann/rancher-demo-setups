@@ -26,11 +26,11 @@ variable "output_dir" {
 }
 variable "cert_manager_version" {
   type = string
-  default = "v0.15.0-alpha.0"
+  default = "v0.15.0"
 }
 variable "rancher_version" {
   type = string
-  default = "2.4.2"
+  default = "2.4.3"
 }
 variable "email" {
   type = string
