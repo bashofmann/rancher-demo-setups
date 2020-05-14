@@ -1,0 +1,14 @@
+allowVolumeExpansion: true
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: longhorn-external
+parameters:
+  diskSelector: "external"
+  baseImage: ""
+  fromBackup: ""
+  numberOfReplicas: "2"
+  staleReplicaTimeout: "30"
+provisioner: driver.longhorn.io
+reclaimPolicy: Delete
+volumeBindingMode: Immediate

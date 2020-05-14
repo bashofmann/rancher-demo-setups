@@ -1,0 +1,148 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: longhorn-external-disk
+  namespace: loadtest
+spec:
+  storageClassName: longhorn-external
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: longhorn-external-disk
+  namespace: loadtest
+spec:
+  selector:
+    matchLabels:
+      loadtest: longhorn-external-disk
+  template:
+    metadata:
+      labels:
+        loadtest: longhorn-external-disk
+    spec:
+        volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: longhorn-external-disk
+        - name: benchmarks
+          emptyDir: {}
+        - name: plots
+          emptyDir: {}
+        containers:
+        - name: fio-frontend
+          imagePullPolicy: Always
+          image: artmr/fio-http-server:0.1
+          volumeMounts:
+          - name: benchmarks
+            mountPath: /server/benchmarks
+          - name: plots
+            mountPath: /server/plots
+          ports:
+          - containerPort: 8000
+        initContainers:
+        - name: fio-gen-data
+          imagePullPolicy: Always
+          image: artmr/fio-gen-data:0.1
+          args: ["/app/job-templates/random-template.fio"]
+          volumeMounts:
+          - name: data
+            mountPath: /app/data
+          - name: benchmarks
+            mountPath: /app/benchmarks
+          env:
+            - name: OUTPUT_DIR
+              valueFrom:
+                configMapKeyRef:
+                  name: loadtest-config
+                  key: gen-data.output-dir
+            - name: BLOCK_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  name: loadtest-config
+                  key: gen-data.block-size
+            - name: DIRECT
+              valueFrom:
+                configMapKeyRef:
+                  name: loadtest-config
+                  key: gen-data.direct
+            - name: DIRECTORY
+              valueFrom:
+                configMapKeyRef:
+                  name: loadtest-config
+                  key: gen-data.directory
+            - name: FILENAME
+              valueFrom:
+                configMapKeyRef:
+                  name: loadtest-config
+                  key: gen-data.filename
+            - name: IO_ENGINE
+              valueFrom:
+                configMapKeyRef:
+                  name: loadtest-config
+                  key: gen-data.io-engine
+            - name: LOG_AVG_MSEC
+              valueFrom:
+                configMapKeyRef:
+                  name: loadtest-config
+                  key: gen-data.log-avg-msec
+            - name: RAND_REPEAT
+              valueFrom:
+                configMapKeyRef:
+                  name: loadtest-config
+                  key: gen-data.rand-repeat
+            - name: RUNTIME
+              valueFrom:
+                configMapKeyRef:
+                  name: loadtest-config
+                  key: gen-data.runtime
+            - name: SIZE
+              valueFrom:
+                configMapKeyRef:
+                  name: loadtest-config
+                  key: gen-data.size
+            - name: TIME_BASED
+              valueFrom:
+                configMapKeyRef:
+                  name: loadtest-config
+                  key: gen-data.time-based
+        - name: fio-gen-plots
+          imagePullPolicy: Always
+          image: artmr/fio-gen-plots:0.1
+          args: ["-L", "-i", "/benchmarks"]
+          volumeMounts:
+          - name: benchmarks
+            mountPath: /benchmarks
+          - name: plots
+            mountPath: /plots
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: longhorn-external-disk
+  namespace: loadtest
+spec:
+  rules:
+    - host: longhorn-external-disk.loadtest.172.16.133.232.xip.io
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: longhorn-external-disk
+              servicePort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: longhorn-external-disk
+  namespace: loadtest
+spec:
+  ports:
+    - port: 80
+      targetPort: 8000
+  selector:
+    loadtest: longhorn-external-disk
