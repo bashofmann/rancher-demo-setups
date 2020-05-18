@@ -1,0 +1,29 @@
+apiVersion: "storageos.com/v1"
+kind: StorageOSCluster
+metadata:
+  name: "storageos"
+  namespace: "storageos-operator"
+spec:
+  secretRefName: "storageos-api" # Reference from the Secret created in the previous step
+  secretRefNamespace: "storageos-operator"  # Namespace of the Secret
+  namespace: "kube-system"
+  k8sDistro: "rancher"
+  disableScheduler: true
+  kvBackend:
+    #address: 'storageos-etcd-client.etcd:2379' # Example address, change for your etcd endpoint
+    address: '172.16.133.218:2379,172.16.133.205:2379,172.16.133.194:2379' # You can set ETCD server ips
+  csi:
+    enable: true
+    deploymentStrategy: deployment
+    enableControllerPublishCreds: true
+    enableNodePublishCreds: true
+    enableProvisionCreds: true
+  resources:
+    requests:
+    memory: "512Mi"
+#  nodeSelectorTerms:
+#    - matchExpressions:
+#      - key: "node-role.kubernetes.io/worker" # Compute node label will vary according to your installation
+#        operator: In
+#        values:
+#        - "true"
