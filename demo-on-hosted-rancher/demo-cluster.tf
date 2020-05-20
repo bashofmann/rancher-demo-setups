@@ -1,7 +1,4 @@
 module "demo-cluster-aws" {
-  depends_on = [
-    aws_security_group.rancher_sg_allowall
-  ]
   source                 = "../modules/demo-cluster-aws"
   rancher_url            = var.rancher_url
   rancher_access_key     = var.rancher_access_key
