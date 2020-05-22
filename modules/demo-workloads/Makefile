@@ -46,7 +46,7 @@ install-loki:
 	kubectl create namespace loki || true
 	kubectl label namespace loki field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
 	kubectl annotate namespace loki field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
-	helm upgrade --install loki loki/loki-stack --namespace loki --version 0.34.2 -f loki/values.yaml
+	helm upgrade --install loki loki/loki-stack --namespace loki --version 0.37.0 -f loki/values.yaml
 	#kubectl apply -f loki/datasource.yaml
 	#kubectl rollout restart deployment -n cattle-prometheus grafana-cluster-monitoring
 
