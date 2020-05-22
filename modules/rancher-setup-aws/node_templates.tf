@@ -12,6 +12,7 @@ resource "rancher2_node_template" "controlplane" {
   description = "Template for control plane nodes"
 
   cloud_credential_id = rancher2_cloud_credential.aws.id
+  engine_install_url  = "https://releases.rancher.com/install-docker/${var.docker_version}.sh"
 
   amazonec2_config {
     ami                  = var.aws_ami
@@ -31,6 +32,7 @@ resource "rancher2_node_template" "worker" {
   description = "Template for worker nodes"
 
   cloud_credential_id = rancher2_cloud_credential.aws.id
+  engine_install_url  = "https://releases.rancher.com/install-docker/${var.docker_version}.sh"
 
   amazonec2_config {
     ami                  = var.aws_ami

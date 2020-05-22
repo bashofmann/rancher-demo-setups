@@ -39,6 +39,8 @@ variable "aws_vpc_id" {
 }
 variable "aws_zone" {
 }
+variable "docker_version" {
+}
 variable "prefix" {
   type    = string
   default = "bhofmann"

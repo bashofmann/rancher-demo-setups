@@ -11,4 +11,5 @@ module "rancher-setup" {
   aws_subnet_id      = ""
   aws_vpc_id         = ""
   aws_zone           = "a"
+  docker_version     = var.docker_version
 }
