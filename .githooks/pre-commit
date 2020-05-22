@@ -3,15 +3,9 @@
 # Format all staged terraform files
 for file in `git diff --cached --name-only --diff-filter=ACMR | grep "\.tf$"`
 do
-  echo "Formatting $file"
-  # Get the file from index and format it
-  git show ":$file" | terraform fmt - > "$file.tmp"
-  # Create a blob object from the formatted file
-  hash=`git hash-object -w "$file.tmp"`
-  # Add it back to index
-  git update-index --add --cacheinfo 100644 "$hash" "$file"
-  # Remove the tmp file
-  rm "$file.tmp"
+  echo "Formatting ${file}"
+  terraform fmt ${file}
+  git add ${file}
 done
 
 # If no files left in index after formatting - fail
