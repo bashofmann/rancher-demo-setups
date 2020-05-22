@@ -36,7 +36,7 @@ resource "rancher2_cluster" "demo" {
     scan_config {
       cis_scan_config {
         override_benchmark_version = "rke-cis-1.4"
-        profile = "permissive"
+        profile                    = "permissive"
       }
     }
     schedule_config {

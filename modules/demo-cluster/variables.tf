@@ -2,15 +2,15 @@ variable "rancher_url" {
   type = string
 }
 variable "rancher_admin_token" {
-  type = string
+  type    = string
   default = null
 }
 variable "rancher_access_key" {
-  type = string
+  type    = string
   default = null
 }
 variable "rancher_secret_key" {
-  type = string
+  type    = string
   default = null
 }
 variable "cluster_id" {
@@ -23,10 +23,10 @@ variable "cluster_kubeconfig" {
   type = string
 }
 variable "controlplane-nodetemplate-id" {
-    type = string
+  type = string
 }
 variable "worker-nodetemplate-id" {
-    type = string
+  type = string
 }
 variable "prefix" {
   type    = string

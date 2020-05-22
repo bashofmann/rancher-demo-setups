@@ -2,9 +2,9 @@
 resource "local_file" "certificate" {
   filename = "${path.module}/certificate/certificate.yaml"
   content = templatefile("${path.module}/certificate/certificate.yaml.tmpl", {
-    rancher_hostname = digitalocean_record.rancher.fqdn
+    rancher_hostname   = digitalocean_record.rancher.fqdn
     digitalocean_token = base64encode(var.digitalocean_token)
-    email = var.email
+    email              = var.email
   })
 }
 
@@ -14,13 +14,13 @@ resource "null_resource" "rancher" {
   ]
 
   provisioner "local-exec" {
-      command = "make -C ${path.module} install-rancher"
-      environment = {
-        KUBECONFIG = data.local_file.kube_admin.filename
-        CERT_MANAGER_VERSION = var.cert_manager_version
-        RANCHER_VERSION = var.rancher_version
-        RANCHER_HOSTNAME = digitalocean_record.rancher.fqdn
-      }
+    command = "make -C ${path.module} install-rancher"
+    environment = {
+      KUBECONFIG           = data.local_file.kube_admin.filename
+      CERT_MANAGER_VERSION = var.cert_manager_version
+      RANCHER_VERSION      = var.rancher_version
+      RANCHER_HOSTNAME     = digitalocean_record.rancher.fqdn
+    }
   }
 }
 

@@ -1,12 +1,12 @@
 resource "null_resource" "workload" {
   triggers = {
     filehash = sha256(join(",", flatten([
-        for filename in fileset(path.module, "**") : filesha256(abspath("${path.module}/${filename}"))
+      for filename in fileset(path.module, "**") : filesha256(abspath("${path.module}/${filename}"))
       ]
     )))
   }
   provisioner "local-exec" {
-    command = "make -C ${path.module} install"
+     command = "make -C ${path.module} install"
     environment = {
       KUBECONFIG                 = var.kubeconfig_demo
       EMAIL                      = var.email

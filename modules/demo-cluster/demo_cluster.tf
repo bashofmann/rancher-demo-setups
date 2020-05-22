@@ -21,17 +21,17 @@ resource "rancher2_node_pool" "demo-worker" {
 }
 
 resource "rancher2_cluster_sync" "demo" {
-  cluster_id      = var.cluster_id
+  cluster_id = var.cluster_id
   node_pool_ids = [
     rancher2_node_pool.demo-control.id,
     rancher2_node_pool.demo-worker.id
   ]
 
   provisioner "local-exec" {
-    command = "while ! kubectl cluster-info; do echo 'waiting for cluster' && sleep 1; done"
+    command     = "while ! kubectl cluster-info; do echo 'waiting for cluster' && sleep 1; done"
     interpreter = ["bash", "-c"]
     environment = {
-        KUBECONFIG = var.cluster_kubeconfig
+      KUBECONFIG = var.cluster_kubeconfig
     }
   }
 }

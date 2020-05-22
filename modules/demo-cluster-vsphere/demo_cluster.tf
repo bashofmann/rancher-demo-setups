@@ -21,10 +21,10 @@ resource "rancher2_cluster" "demo" {
       max_unavailable_worker = "20%"
     }
     // todo add vsphere cloud provider
-//    cloud_provider {
-//      aws_cloud_provider {
-//      }
-//    }
+    //    cloud_provider {
+    //      aws_cloud_provider {
+    //      }
+    //    }
   }
   enable_cluster_monitoring = true
   lifecycle {
@@ -37,7 +37,7 @@ resource "rancher2_cluster" "demo" {
     scan_config {
       cis_scan_config {
         override_benchmark_version = "rke-cis-1.4"
-        profile = "permissive"
+        profile                    = "permissive"
       }
     }
     schedule_config {

@@ -2,7 +2,7 @@
 resource "local_file" "rke_configuration" {
   filename = "${var.output_dir}/rke-rendered.yml"
   content = templatefile("${path.module}/rke-config.tmpl", {
-    nodes = var.nodes
+    nodes              = var.nodes
     kubernetes_version = var.rke_kubernetes_version
   })
 }
@@ -14,9 +14,9 @@ resource "null_resource" "rke_bootup" {
   ]
 
   provisioner "local-exec" {
-      command = "rke up"
-      environment = {
-        RKE_CONFIG = local_file.rke_configuration.filename
-      }
+    command = "rke up"
+    environment = {
+      RKE_CONFIG = local_file.rke_configuration.filename
+    }
   }
 }

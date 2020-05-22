@@ -36,6 +36,6 @@ resource "aws_instance" "k3s" {
   security_groups = [aws_security_group.rancher_sg_allowall.name]
 
   tags = {
-    Name    = "${var.prefix}-k3s"
+    Name = "${var.prefix}-k3s"
   }
 }

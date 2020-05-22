@@ -19,12 +19,12 @@ module "demo-cluster" {
 }
 
 module "demo-workloads" {
-  source              = "../modules/demo-workloads"
-  digitalocean_token  = var.digitalocean_token
-  dns_txt_owner_id    = "rancher-demo-vsphere"
-  kubeconfig_demo     = module.demo-cluster-vsphere.kubeconfig
-  email               = var.email
-  ingress_base_domain = "rancher-vsphere.plgrnd.be"
+  source                    = "../modules/demo-workloads"
+  digitalocean_token        = var.digitalocean_token
+  dns_txt_owner_id          = "rancher-demo-vsphere"
+  kubeconfig_demo           = module.demo-cluster-vsphere.kubeconfig
+  email                     = var.email
+  ingress_base_domain       = "rancher-vsphere.plgrnd.be"
   cluster_id                = module.demo-cluster.cluster_id
   rancher_system_project_id = module.demo-cluster.rancher_system_project_id
 }

@@ -6,56 +6,15 @@ data "rancher2_project" "system" {
   name       = "System"
 }
 
-resource "rancher2_namespace" "longhorn-system" {
-  name       = "longhorn-system"
-  project_id = data.rancher2_project.system.id
-}
+//resource "rancher2_namespace" "longhorn-system" {
+//  name       = "longhorn-system"
+//  project_id = data.rancher2_project.system.id
+//}
 
 //resource "rancher2_namespace" "istio-system" {
 //  name       = "istio-system"
 //  project_id = data.rancher2_project.system.id
 //}
-
-resource "rancher2_app" "longhorn-system" {
-  catalog_name     = "library"
-  name             = "longhorn-system"
-  project_id       = data.rancher2_project.system.id
-  template_name    = "longhorn"
-  template_version = "0.8.1"
-  target_namespace = rancher2_namespace.longhorn-system.name
-  answers = {
-    "csi.attacherReplicaCount" = "",
-    "csi.kubeletRootDir" = "",
-    "csi.provisionerReplicaCount" = "",
-    "defaultSettings.backupTarget" = "",
-    "defaultSettings.backupTargetCredentialSecret" = "",
-    "defaultSettings.backupstorePollInterval" = "300",
-    "defaultSettings.createDefaultDiskLabeledNodes" = "false",
-    "defaultSettings.defaultDataPath" = "/var/lib/longhorn/",
-    "defaultSettings.defaultLonghornStaticStorageClass" = "longhorn-static",
-    "defaultSettings.defaultReplicaCount" = "3",
-    "defaultSettings.guaranteedEngineCPU" = "0",
-    "defaultSettings.registrySecret" = "",
-    "defaultSettings.replicaSoftAntiAffinity" = "true",
-    "defaultSettings.storageMinimalAvailablePercentage" = "25",
-    "defaultSettings.storageOverProvisioningPercentage" = "200",
-    "defaultSettings.taintToleration" = "",
-    "defaultSettings.upgradeChecker" = "true",
-    "image.defaultImage" = "true",
-    "ingress.enabled" = "false",
-    "persistence.defaultClass" = "true",
-    "persistence.defaultClassReplicaCount" = "3",
-    "privateRegistry.registryPasswd" = "",
-    "privateRegistry.registryUrl" = "",
-    "privateRegistry.registryUser" = "",
-    "service.ui.type" = "Rancher-Proxy"
-  }
-  lifecycle {
-    ignore_changes = [
-      project_id
-    ]
-  }
-}
 
 //resource "rancher2_app" "istio-system" {
 //  catalog_name     = "system-library"

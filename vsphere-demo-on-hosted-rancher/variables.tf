@@ -1,33 +1,18 @@
 variable "rancher_url" {
   type = string
 }
-variable "rancher_admin_token" {
-  type    = string
-  default = null
-}
 variable "rancher_access_key" {
-  type    = string
-  default = null
+  type = string
 }
 variable "rancher_secret_key" {
-  type    = string
-  default = null
+  type = string
 }
-
+variable "prefix" {
+  type        = string
+  description = "Prefix added to names of all resources"
+  default     = "bhofmann"
+}
 variable "vm_template_name" {
-  type = string
-}
-
-variable "vcenter_user" {
-  type = string
-}
-
-variable "vcenter_password" {
-  type = string
-}
-
-// vCenter server FQDN or IP address
-variable "vcenter_server" {
   type = string
 }
 
@@ -56,4 +41,21 @@ variable "vsphere_datastore" {
 # VM Network to attach the VMs
 variable "vsphere_network" {
   type = string
+}
+variable "vcenter_user" {
+  type = string
+}
+
+variable "vcenter_password" {
+  type = string
+}
+
+// vCenter server FQDN or IP address
+variable "vcenter_server" {
+  type = string
+}
+variable "ssh_key_file_name" {
+  type        = string
+  description = "File path and name of SSH private key used for infrastructure and RKE"
+  default     = "~/.ssh/id_rsa"
 }

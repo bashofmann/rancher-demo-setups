@@ -2,15 +2,15 @@ variable "rancher_url" {
   type = string
 }
 variable "rancher_admin_token" {
-  type = string
+  type    = string
   default = null
 }
 variable "rancher_access_key" {
-  type = string
+  type    = string
   default = null
 }
 variable "rancher_secret_key" {
-  type = string
+  type    = string
   default = null
 }
 
