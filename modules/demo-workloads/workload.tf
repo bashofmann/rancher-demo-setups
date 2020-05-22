@@ -6,7 +6,7 @@ resource "null_resource" "workload" {
     )))
   }
   provisioner "local-exec" {
-     command = "make -C ${path.module} install"
+    command = "make -C ${path.module} install"
     environment = {
       KUBECONFIG                 = var.kubeconfig_demo
       EMAIL                      = var.email
