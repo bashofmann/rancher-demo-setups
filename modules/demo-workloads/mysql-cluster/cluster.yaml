@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: mysql-secret
+  namespace: default
+type: Opaque
+data:
+  # root password is required to be specified
+  # iJKpC3OIJB3ozyIp
+  ROOT_PASSWORD: aUpLcEMzT0lKQjNvenlJcA==
+  # application credentials that will be created at cluster bootstrap
+  # wordpress
+  DATABASE: d29yZHByZXNz
+  # wordpress
+  USER: d29yZHByZXNz
+  # 0lYNAYzayGoIUCfA
+  PASSWORD: MGxZTkFZemF5R29JVUNmQQ==
+---
+apiVersion: mysql.presslabs.org/v1alpha1
+kind: MysqlCluster
+metadata:
+  name: db
+  namespace: default
+spec:
+  replicas: 3
+  secretName: mysql-secret
+  mysqlVersion: "5.7"
+  minAvailable: "50%"
+
+  mysqlConf:
+    max_connections: "200"
+    innodb-buffer-pool-size: "256M"
+    tmp_table_size: 256M
+    max_heap_table_size: 256M
+
+  podSpec:
+    resources:
+      requests:
+        memory: 256Mi
+        cpu:    200m
+
+  volumeSpec:
+    persistentVolumeClaim:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
