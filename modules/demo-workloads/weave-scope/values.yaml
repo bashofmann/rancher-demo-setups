@@ -1,0 +1,19 @@
+global:
+  image:
+    tag: 1.13.1
+
+weave-scope-frontend:
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/auth-type: basic
+      nginx.ingress.kubernetes.io/auth-secret: basic-auth
+    paths:
+      - /
+    hosts:
+      - weave-scope.${INGRESS_BASE_DOMAIN}
+    tls:
+      - secretName: weave-scope-tls
+        hosts:
+          - weave-scope.${INGRESS_BASE_DOMAIN}
