@@ -1,4 +1,4 @@
-install: add-helm-repos install-sealed-secrets install-cert-manager install-external-dns install-demo-shop install-rancher-demo install-mysql-operator install-loki install-rio install-argocd helm-whatup
+install: add-helm-repos install-sealed-secrets install-cert-manager install-external-dns install-demo-shop install-rancher-demo install-mysql-operator install-loki install-rio install-argocd install-weave-scope helm-whatup
 
 add-helm-repos:
 	helm repo add stable https://kubernetes-charts.storage.googleapis.com/
@@ -29,7 +29,7 @@ install-mysql-operator:
 	kubectl create namespace mysql-operator || true
 	kubectl label namespace mysql-operator field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
 	kubectl annotate namespace mysql-operator field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
-	helm upgrade --install mysql-operator presslabs/mysql-operator --namespace mysql-operator --version 0.4.0-rc.1 -f mysql-operator/values.yaml
+	cat mysql-operator/values.yaml | envsubst | helm upgrade --install mysql-operator presslabs/mysql-operator --namespace mysql-operator --version 0.4.0-rc.1 -f -
 
 install-demo-shop:
 	kubectl create namespace shop || true
@@ -67,6 +67,13 @@ install-nexus:
 	kubectl label namespace nexus field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
 	kubectl annotate namespace nexus field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
 	helm upgrade --install nexus oteemo/sonatype-nexus --namespace nexus --version 2.1.0 -f nexus/values.yaml
+
+install-weave-scope:
+	kubectl create namespace weave-scope || true
+	kubectl label namespace weave-scope field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
+	kubectl annotate namespace weave-scope field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
+	kubectl apply -f weave-scope/basic-auth.yaml
+	cat weave-scope/values.yaml | envsubst | helm upgrade --install weave-scope  stable/weave-scope  --namespace weave-scope  --version 1.1.10 -f -
 
 helm-whatup:
 #	helm whatup does not work with helm3 yet
