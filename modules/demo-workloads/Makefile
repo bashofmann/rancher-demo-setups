@@ -29,6 +29,7 @@ install-mysql-operator:
 	kubectl create namespace mysql-operator || true
 	kubectl label namespace mysql-operator field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
 	kubectl annotate namespace mysql-operator field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
+	kubectl apply -f mysql-operator/basic-auth.yaml
 	cat mysql-operator/values.yaml | envsubst | helm upgrade --install mysql-operator presslabs/mysql-operator --namespace mysql-operator --version 0.4.0-rc.1 -f -
 
 install-demo-shop:
