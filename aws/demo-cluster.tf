@@ -2,7 +2,7 @@ module "demo-cluster-aws" {
   source                 = "../modules/demo-cluster-aws"
   rancher_url            = module.rancher-server.rancher_url
   rancher_admin_token    = module.rancher-server.rancher_admin_token
-  rke_kubernetes_version = "v1.16.9-rancher1-1"
+  rke_kubernetes_version = "v1.17.6-rancher2-2"
   output_dir             = abspath("${path.module}/out")
 }
 

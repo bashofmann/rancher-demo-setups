@@ -19,7 +19,7 @@ variable "nodes" {
 }
 variable "rke_kubernetes_version" {
   type    = string
-  default = "v1.17.4-rancher1-3"
+  default = "v1.18.3-rancher2-2"
 }
 variable "output_dir" {
   type = string
@@ -30,7 +30,7 @@ variable "cert_manager_version" {
 }
 variable "rancher_version" {
   type    = string
-  default = "2.4.3"
+  default = "2.4.5"
 }
 variable "email" {
   type = string
