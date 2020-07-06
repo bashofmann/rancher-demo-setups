@@ -26,7 +26,7 @@ variable "output_dir" {
 }
 variable "cert_manager_version" {
   type    = string
-  default = "v0.15.0"
+  default = "v0.15.2"
 }
 variable "rancher_version" {
   type    = string
