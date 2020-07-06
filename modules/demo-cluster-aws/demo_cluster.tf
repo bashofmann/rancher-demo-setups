@@ -13,11 +13,7 @@ resource "rancher2_cluster" "demo" {
       }
     }
     upgrade_strategy {
-      drain = true
-      drain_input {
-        delete_local_data = true
-        force             = true
-      }
+      drain                  = false
       max_unavailable_worker = "20%"
     }
     cloud_provider {
