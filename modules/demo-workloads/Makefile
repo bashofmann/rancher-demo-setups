@@ -15,7 +15,7 @@ install-cert-manager:
 	kubectl create namespace cert-manager || true
 	kubectl label namespace cert-manager field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
 	kubectl annotate namespace cert-manager field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
-	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v0.15.0 --set installCRDs=true --wait
+	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v0.15.2 --set installCRDs=true --wait
 	cat cert-manager/clusterissuer.yaml | envsubst | kubectl apply -f -
 	cat cert-manager/credentials-secret.yaml | envsubst | kubectl apply -f -
 
