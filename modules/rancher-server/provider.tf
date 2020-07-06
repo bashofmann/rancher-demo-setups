@@ -5,7 +5,7 @@ provider "digitalocean" {
 
 # Rancher2 bootstrapping provider
 provider "rancher2" {
-  version   = "~> 1.7"
+  version   = "1.9.0"
   api_url   = "https://${digitalocean_record.rancher.fqdn}"
   insecure  = true
   bootstrap = true

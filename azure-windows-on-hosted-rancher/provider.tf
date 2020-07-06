@@ -9,7 +9,7 @@ provider "azurerm" {
 }
 
 provider "rancher2" {
-  version    = "~> 1.7"
+  version    = "1.9.0"
   api_url    = var.rancher_url
   insecure   = true
   token_key  = var.rancher_admin_token
