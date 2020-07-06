@@ -1,6 +1,7 @@
 sources:
   - service
   - ingress
+  - istio-gateway
 
 provider: digitalocean
 
