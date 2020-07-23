@@ -2,7 +2,7 @@ module "demo-cluster-vsphere" {
   source                 = "../modules/demo-cluster-vsphere"
   rancher_url            = module.rancher-server.rancher_url
   rancher_admin_token    = module.rancher-server.rancher_admin_token
-  rke_kubernetes_version = "v1.17.6-rancher2-2"
+  rke_kubernetes_version = "v1.17.9-rancher1-1"
   output_dir             = abspath("${path.module}/out")
 }
 
@@ -15,7 +15,6 @@ module "demo-cluster" {
   cluster_kubeconfig           = module.demo-cluster-vsphere.kubeconfig
   controlplane-nodetemplate-id = module.rancher-setup.controlplane-nodetemplate-id
   worker-nodetemplate-id       = module.rancher-setup.worker-nodetemplate-id
-  output_dir                   = abspath("${path.module}/out")
 }
 
 module "demo-workloads" {
