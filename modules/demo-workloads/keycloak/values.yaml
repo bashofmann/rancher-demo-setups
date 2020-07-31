@@ -1,0 +1,21 @@
+ingress:
+  enabled: true
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  rules:
+    - host: keycloak.plgrnd.be
+      paths:
+        - /
+  tls:
+    - hosts:
+        - keycloak.plgrnd.be
+      secretName: keycloak-tls
+
+extraEnv: |
+  - name: KEYCLOAK_USER
+    value: admin
+  - name: KEYCLOAK_PASSWORD
+    value: admin
+  - name: JAVA_OPTS
+    value: >-
+      -Dkeycloak.frontendUrl=https://keycloak.plgrnd.be/auth
