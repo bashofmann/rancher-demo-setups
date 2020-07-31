@@ -27,6 +27,8 @@ resource "rancher2_cluster_sync" "demo" {
     rancher2_node_pool.demo-worker.id
   ]
 
+  wait_monitoring = true
+
   provisioner "local-exec" {
     command     = "while ! kubectl cluster-info; do echo 'waiting for cluster' && sleep 1; done"
     interpreter = ["bash", "-c"]
