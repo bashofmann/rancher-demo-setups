@@ -6,12 +6,15 @@ add-helm-repos:
 	helm repo add presslabs https://presslabs.github.io/charts
 	helm repo add loki https://grafana.github.io/loki/charts
 	helm repo add oteemo https://oteemo.github.io/charts/
+	helm repo add codecentric https://codecentric.github.io/helm-charts
+	helm repo add elastic https://helm.elastic.co
 	helm repo update
 
 install-sealed-secrets:
 	helm upgrade --install --namespace kube-system sealed-secrets-controller stable/sealed-secrets  --version v1.8.0
 
 install-cert-manager:
+	kubectl create namespace istio-system || true
 	kubectl create namespace cert-manager || true
 	kubectl label namespace cert-manager field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
 	kubectl annotate namespace cert-manager field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
@@ -37,6 +40,15 @@ install-demo-shop:
 	kubectl label namespace shop istio-injection=enabled || true
 	kubectl apply -f demo-shop/demo-shop.yaml -n shop
 	cat demo-shop/ingress.yaml | envsubst | kubectl apply -n shop -f -
+	cat demo-shop/cert.yaml | envsubst | kubectl apply -f -
+	cat demo-shop/ingressgateway.yaml | envsubst | kubectl apply -f -
+
+install-bookinfo:
+	kubectl create namespace bookinfo || true
+	kubectl label namespace bookinfo istio-injection=enabled || true
+	kubectl apply -n bookinfo -f https://raw.githubusercontent.com/istio/istio/release-1.6/samples/bookinfo/platform/kube/bookinfo.yaml
+	kubectl apply -n bookinfo -f https://raw.githubusercontent.com/istio/istio/release-1.6/samples/bookinfo/networking/destination-rule-all.yaml
+	kubectl apply -f bookinfo
 
 install-rancher-demo:
 	cat rancher-demo/deployment.yaml | envsubst | kubectl apply -f -
@@ -68,6 +80,20 @@ install-nexus:
 	kubectl label namespace nexus field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
 	kubectl annotate namespace nexus field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
 	helm upgrade --install nexus oteemo/sonatype-nexus --namespace nexus --version 2.1.0 -f nexus/values.yaml
+
+install-keycloak:
+	kubectl create namespace keycloak || true
+	kubectl label namespace keycloak field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
+	kubectl annotate namespace keycloak field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
+	helm upgrade --install keycloak codecentric/keycloak --namespace keycloak --version 9.0.1 -f keycloak/values.yaml
+
+install-elk:
+	kubectl create namespace logging || true
+	kubectl label namespace logging field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
+	kubectl annotate namespace logging field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
+	kubectl apply -f elk/basic-auth.yaml
+	helm upgrade --install elasticsearch elastic/elasticsearch --version 7.8.1 --namespace logging -f elk/elasticsearch/values.yaml
+	helm upgrade --install kibana elastic/kibana --version 7.8.1 --namespace logging -f elk/kibana/values.yaml
 
 install-weave-scope:
 	kubectl create namespace weave-scope || true
