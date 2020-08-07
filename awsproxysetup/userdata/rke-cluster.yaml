@@ -1,0 +1,18 @@
+nodes:
+  - address: 10.0.1.200
+    user: ubuntu
+    role: [controlplane,worker,etcd]
+  - address: 10.0.1.201
+    user: ubuntu
+    role: [controlplane,worker,etcd]
+  - address: 10.0.1.202
+    user: ubuntu
+    role: [controlplane,worker,etcd]
+
+ssh_agent_auth: true
+
+services:
+  etcd:
+    backup_config:
+      interval_hours: 12
+      retention: 6

@@ -54,3 +54,39 @@ sudo ./get_helm.sh
 
 sudo curl -fsSL -o /usr/local/bin/rke https://github.com/rancher/rke/releases/download/v1.1.4/rke_linux-amd64
 sudo chmod +x /usr/local/bin/rke
+
+sudo apt-get install -y nginx
+
+cat <<'EOF' | sudo tee /etc/nginx/nginx.conf > /dev/null
+load_module /usr/lib/nginx/modules/ngx_stream_module.so;
+worker_processes 4;
+worker_rlimit_nofile 40000;
+events {
+    worker_connections 8192;
+}
+stream {
+    upstream rancher_servers_http {
+        least_conn;
+        server 10.0.1.200:80 max_fails=3 fail_timeout=5s;
+        server 10.0.1.201:80 max_fails=3 fail_timeout=5s;
+        server 10.0.1.202:80 max_fails=3 fail_timeout=5s;
+    }
+    server {
+        listen 80;
+        proxy_pass rancher_servers_http;
+    }
+
+    upstream rancher_servers_https {
+        least_conn;
+        server 10.0.1.200:443 max_fails=3 fail_timeout=5s;
+        server 10.0.1.201:443 max_fails=3 fail_timeout=5s;
+        server 10.0.1.202:443 max_fails=3 fail_timeout=5s;
+    }
+    server {
+        listen     443;
+        proxy_pass rancher_servers_https;
+    }
+}
+EOF
+
+sudo service nginx reload

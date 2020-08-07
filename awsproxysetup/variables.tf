@@ -35,9 +35,3 @@ variable "ssh_key_file_name" {
   description = "File path and name of SSH private key used for infrastructure and RKE"
   default     = "~/.ssh/id_rsa"
 }
-variable "digitalocean_token" {
-}
-variable "rancher_domain" {
-}
-variable "rancher_subdomain" {
-}

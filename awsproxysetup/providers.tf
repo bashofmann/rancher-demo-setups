@@ -5,7 +5,3 @@ provider "aws" {
   secret_key = var.aws_secret_key
   region     = var.aws_region
 }
-provider "digitalocean" {
-  version = "~> 1.15"
-  token   = var.digitalocean_token
-}
