@@ -1,0 +1,32 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: prometheus
+  namespace: cattle-prometheus
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
+spec:
+  tls:
+    - hosts:
+        - prometheus.rancher-demo.plgrnd.be
+      secretName: prometheus-demo-tls
+  rules:
+  - host: prometheus.rancher-demo.plgrnd.be
+    http:
+      paths:
+      - backend:
+          serviceName: access-prometheus
+          servicePort: 80
+        path: /
+---
+apiVersion: v1
+data:
+  # foo:bar
+  auth: Zm9vOiRhcHIxJExXNlpJSHV5JEpZNGlHcGQvQWQvZ1ovQzN3WlIxcTEK
+kind: Secret
+metadata:
+  name: basic-auth
+  namespace: cattle-prometheus
+type: Opaque
