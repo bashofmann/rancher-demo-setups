@@ -77,7 +77,7 @@ resource "rancher2_app" "longhorn" {
   name             = "longhorn"
   project_id       = rancher2_namespace.longhorn-system.project_id
   template_name    = "longhorn"
-  template_version = "1.0.1"
+  template_version = "1.0.2"
   target_namespace = rancher2_namespace.longhorn-system.name
   answers = {
 
