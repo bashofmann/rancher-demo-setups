@@ -30,7 +30,7 @@ variable "cert_manager_version" {
 }
 variable "rancher_version" {
   type    = string
-  default = "2.4.5"
+  default = "2.4.8"
 }
 variable "email" {
   type = string
