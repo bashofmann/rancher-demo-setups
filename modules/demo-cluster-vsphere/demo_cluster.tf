@@ -44,7 +44,7 @@ resource "rancher2_cluster" "demo" {
       "prometheus.resources.core.requests.memory" = "750Mi"
       "prometheus.retention"                      = "12h"
     }
-    version = "0.1.1"
+    version = "0.1.2"
   }
   scheduled_cluster_scan {
     enabled = true
