@@ -1,7 +1,7 @@
 terraform {
   required_providers {
-    local = {
-      source = "hashicorp/local"
+    digitalocean = {
+      source = "digitalocean/digitalocean"
     }
     rancher2 = {
       source  = "rancher/rancher2"

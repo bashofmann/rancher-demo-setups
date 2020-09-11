@@ -1,5 +1,4 @@
 provider "azurerm" {
-  version = "2.0.0"
   features {}
 
   subscription_id = var.azure_subscription_id
@@ -9,7 +8,6 @@ provider "azurerm" {
 }
 
 provider "rancher2" {
-  version    = "1.10.0"
   api_url    = var.rancher_url
   insecure   = true
   token_key  = var.rancher_admin_token
