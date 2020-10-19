@@ -1,0 +1,7 @@
+expose:
+  ingress:
+    hosts:
+      core: harbor.demo.plgrnd.be
+
+notary:
+  enabled: false

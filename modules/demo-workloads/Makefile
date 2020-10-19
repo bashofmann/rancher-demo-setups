@@ -102,5 +102,10 @@ install-weave-scope:
 	kubectl apply -f weave-scope/basic-auth.yaml
 	cat weave-scope/values.yaml | envsubst | helm upgrade --install weave-scope  stable/weave-scope  --namespace weave-scope  --version 1.1.10 -f -
 
+install-harbor:
+	kubectl create namespace harbor || true
+	helm upgrade --install harbor harbor/harbor --version 1.5.0 --namespace harbor -f harbor/values.yaml
+	kubectl apply -f harbor/certificate.yaml
+
 helm-whatup:
 #	helm whatup does not work with helm3 yet
