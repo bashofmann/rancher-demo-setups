@@ -9,7 +9,7 @@ resource "aws_key_pair" "quickstart_key_pair" {
 // TODO more
 # Security group to allow all traffic
 resource "aws_security_group" "rancher_sg_allowall" {
-  name        = "${var.prefix}-k3s-allowall"
+  name        = "${var.prefix}-aws-allowall"
   description = "Rancher quickstart - allow all traffic"
 
   ingress {
@@ -44,6 +44,10 @@ resource "aws_instance" "rancher-cluster" {
     username       = local.node_username
   })
 
+  root_block_device {
+    volume_size = 80
+  }
+
   provisioner "remote-exec" {
     inline = [
       "cloud-init status --wait"
@@ -74,6 +78,10 @@ resource "aws_instance" "downstream-cluster" {
     docker_version = "19.03"
     username       = local.node_username
   })
+
+  root_block_device {
+    volume_size = 80
+  }
 
   provisioner "remote-exec" {
     inline = [
