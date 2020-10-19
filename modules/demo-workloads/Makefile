@@ -8,6 +8,7 @@ add-helm-repos:
 	helm repo add oteemo https://oteemo.github.io/charts/
 	helm repo add codecentric https://codecentric.github.io/helm-charts
 	helm repo add elastic https://helm.elastic.co
+    helm repo add harbor https://helm.goharbor.io
 	helm repo update
 
 install-sealed-secrets:
