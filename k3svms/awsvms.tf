@@ -29,7 +29,7 @@ resource "aws_security_group" "rancher_sg_allowall" {
 
 resource "aws_instance" "k3s" {
   count         = 3
-  ami           = data.aws_ami.centos.id
+  ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
 
   key_name        = aws_key_pair.quickstart_key_pair.key_name
