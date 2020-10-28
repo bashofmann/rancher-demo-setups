@@ -1,14 +1,14 @@
 install: add-helm-repos install-sealed-secrets install-cert-manager install-external-dns install-demo-shop install-rancher-demo install-mysql-operator install-loki install-rio install-argocd install-weave-scope helm-whatup
 
 add-helm-repos:
-	helm repo add stable https://kubernetes-charts.storage.googleapis.com/
+	helm repo add stable https://charts.helm.sh/stable
 	helm repo add jetstack https://charts.jetstack.io
 	helm repo add presslabs https://presslabs.github.io/charts
 	helm repo add loki https://grafana.github.io/loki/charts
 	helm repo add oteemo https://oteemo.github.io/charts/
 	helm repo add codecentric https://codecentric.github.io/helm-charts
 	helm repo add elastic https://helm.elastic.co
-    helm repo add harbor https://helm.goharbor.io
+	helm repo add harbor https://helm.goharbor.io
 	helm repo update
 
 install-sealed-secrets:
