@@ -1,0 +1,8 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: ca-issuer
+  namespace: cattle-system
+spec:
+  ca:
+    secretName: ca-key-pair

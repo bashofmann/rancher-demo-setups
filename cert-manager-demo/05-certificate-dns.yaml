@@ -1,0 +1,12 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: letsencrypt-dns
+  namespace: default
+spec:
+  secretName: cert-letsencrypt-dns-tls
+  clusterIssuerRef:
+    name: letsencrypt-dns-prod
+  commonName: demo-dns.k8s-demo.plgrnd.be
+  dnsNames:
+  - www.demo-dns.k8s-demo.plgrnd.be

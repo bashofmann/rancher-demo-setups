@@ -1,0 +1,18 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: rancher-demo-http
+  namespace: default
+spec:
+  rules:
+  - host: demo-http.k8s-demo.plgrnd.be
+    http:
+      paths:
+      - backend:
+          serviceName: rancher-demo
+          servicePort: 80
+        path: /
+  tls:
+  - hosts:
+    - demo-http.k8s-demo.plgrnd.be
+    secretName: cert-letsencrypt-http-tls

@@ -1,0 +1,17 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-dns-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: mail@bastianhofmann.de
+    privateKeySecretRef:
+      name: letsencrypt-dns-prod
+    solvers:
+      - selector: { }
+        dns01:
+          digitalocean:
+            tokenSecretRef:
+              key: access-token
+              name: digitalocean-credentials-secret

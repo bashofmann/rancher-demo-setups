@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-http-prod
+  namespace: default
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: mail@bastianhofmann.de
+    privateKeySecretRef:
+      name: letsencrypt-http-prod
+    solvers:
+    # An empty 'selector' means that this solver matches all domains
+    - selector: {}
+      http01:
+        ingress: {}

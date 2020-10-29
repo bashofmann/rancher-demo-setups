@@ -1,0 +1,10 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-ca
+  namespace: cattle-system
+spec:
+  secretName: tls-rancher-ingress
+  issuerRef:
+    name: ca-issuer
+  commonName: rancher.k8s-demo.plgrnd.be

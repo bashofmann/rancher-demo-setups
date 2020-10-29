@@ -1,0 +1,10 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: cert-selfsigned
+  namespace: default
+spec:
+  secretName: cert-selfsigned-tls
+  issuerRef:
+    name: selfsigned-issuer
+  commonName: demo-selfsigned.k8s-demo.plgrnd.be

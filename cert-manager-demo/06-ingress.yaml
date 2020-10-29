@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-dns-prod
+  name: rancher-demo-ingress
+  namespace: default
+spec:
+  rules:
+  - host: demo-ingress.k8s-demo.plgrnd.be
+    http:
+      paths:
+      - backend:
+          serviceName: rancher-demo
+          servicePort: 80
+        path: /
+  tls:
+  - hosts:
+    - demo-ingress.k8s-demo.plgrnd.be
+    secretName: cert-letsencrypt-ingress-tls
