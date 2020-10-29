@@ -1,0 +1,14 @@
+trow:
+  domain: trow.k8s-demo.plgrnd.be
+ingress:
+    enabled: true
+    annotations:
+        cert-manager.io/issuer: letsencrypt-prod
+    hosts:
+      - host: trow.k8s-demo.plgrnd.be
+        paths:
+          - /
+    tls:
+    - hosts:
+      - trow.k8s-demo.plgrnd.be
+      secretName: trow-cert

@@ -19,7 +19,7 @@ install-cert-manager:
 	kubectl create namespace cert-manager || true
 	kubectl label namespace cert-manager field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
 	kubectl annotate namespace cert-manager field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
-	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v0.15.2 --set installCRDs=true --wait
+	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.0.4 --set installCRDs=true --wait
 	cat cert-manager/clusterissuer.yaml | envsubst | kubectl apply -f -
 	cat cert-manager/credentials-secret.yaml | envsubst | kubectl apply -f -
 
@@ -102,6 +102,12 @@ install-weave-scope:
 	kubectl annotate namespace weave-scope field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
 	kubectl apply -f weave-scope/basic-auth.yaml
 	cat weave-scope/values.yaml | envsubst | helm upgrade --install weave-scope  stable/weave-scope  --namespace weave-scope  --version 1.1.10 -f -
+
+install-trow:
+	helm repo add trow https://trow.io
+	kubectl create namespace trow || true
+	kubectl apply -f trow/issuer.yaml
+	helm upgrade --install -f trow/values.yaml trow trow/trow --namespace trow
 
 install-harbor:
 	kubectl create namespace harbor || true

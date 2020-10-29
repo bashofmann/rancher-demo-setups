@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: letsencrypt-prod
+  namespace: trow
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: mail@bastianhofmann.de
+    privateKeySecretRef:
+      name: letsencrypt-http-prod
+    solvers:
+    - selector: {}
+      http01:
+        ingress: {}
