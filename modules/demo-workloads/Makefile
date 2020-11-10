@@ -114,5 +114,10 @@ install-harbor:
 	helm upgrade --install harbor harbor/harbor --version 1.5.0 --namespace harbor -f harbor/values.yaml
 	kubectl apply -f harbor/certificate.yaml
 
+troubleshoot-network:
+	kubectl apply -f network-debugging
+	kubectl rollout status daemonset -n default overlaytest
+	echo "=> Start network overlay test"; kubectl -n default get pods -l name=overlaytest -o jsonpath='{range .items[*]}{@.metadata.name}{" "}{@.spec.nodeName}{"\n"}{end}' | while read spod shost; do kubectl -n default get pods -l name=overlaytest -o jsonpath='{range .items[*]}{@.status.podIP}{" "}{@.spec.nodeName}{"\n"}{end}' | while read tip thost; do kubectl -n default --request-timeout='10s' exec $spod -- /bin/sh -c "ping -c2 $tip > /dev/null 2>&1"; RC=$?; if [ $RC -ne 0 ]; then echo $shost cannot reach $thost; fi; done; done; echo "=> End network overlay test"
+
 helm-whatup:
 #	helm whatup does not work with helm3 yet
