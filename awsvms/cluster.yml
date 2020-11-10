@@ -1,0 +1,24 @@
+# curl https://releases.rancher.com/install-docker/19.03.sh | sh
+# sudo usermod -aG docker centos
+
+nodes:
+  - address: 18.185.38.80
+    user: ubuntu
+    role:
+      - controlplane
+      - etcd
+      - worker
+  - address: 35.158.116.137
+    user: ubuntu
+    role:
+      - controlplane
+      - etcd
+      - worker
+  - address: 18.192.178.59
+    user: ubuntu
+    role:
+      - controlplane
+      - etcd
+      - worker
+
+kubernetes_version: v1.19.3-rancher1-1
