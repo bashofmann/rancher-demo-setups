@@ -36,7 +36,9 @@ resource "aws_instance" "rancher-cluster" {
   security_groups = [aws_security_group.rancher_sg_allowall.name]
 
   tags = {
-    Name = "${var.prefix}-k3s"
+    Name        = "${var.prefix}-rc-${count.index}"
+    Owner       = "bhofmann"
+    DoNotDelete = "true"
   }
 
   user_data = templatefile("../userdata/server.sh", {
@@ -71,7 +73,9 @@ resource "aws_instance" "downstream-cluster" {
   security_groups = [aws_security_group.rancher_sg_allowall.name]
 
   tags = {
-    Name = "${var.prefix}-k3s"
+    Name        = "${var.prefix}-ds-${count.index}"
+    Owner       = "bhofmann"
+    DoNotDelete = "true"
   }
 
   user_data = templatefile("../userdata/server.sh", {

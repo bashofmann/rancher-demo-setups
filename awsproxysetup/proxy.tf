@@ -131,6 +131,8 @@ resource "aws_instance" "proxy" {
     }
   }
   tags = {
-    Name = "bbhofmann-vpc-proxy"
+    Name        = "bbhofmann-vpc-proxy"
+    Owner       = "bhofmann"
+    DoNotDelete = "true"
   }
 }

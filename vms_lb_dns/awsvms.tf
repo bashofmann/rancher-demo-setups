@@ -38,6 +38,8 @@ resource "aws_instance" "vmlb" {
   }
 
   tags = {
-    Name = "${var.prefix}-vmlb"
+    Name        = "${var.prefix}-vmlb-${count.index}"
+    Owner       = "bhofmann"
+    DoNotDelete = "true"
   }
 }

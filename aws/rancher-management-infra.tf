@@ -58,8 +58,10 @@ resource "aws_instance" "rancher_server" {
   }
 
   tags = {
-    Name    = "${var.prefix}-rancher-server"
-    Creator = "rancher-quickstart"
+    Name        = "${var.prefix}-rancher-server"
+    Creator     = "rancher-quickstart"
+    Owner       = "bhofmann"
+    DoNotDelete = "true"
   }
 }
 
@@ -103,6 +105,8 @@ resource "aws_elb" "rancher-server-lb" {
   connection_draining_timeout = 400
 
   tags = {
-    Name = "${var.prefix}-rancher-server-lb"
+    Name        = "${var.prefix}-rancher-server-lb"
+    Owner       = "bhofmann"
+    DoNotDelete = "true"
   }
 }

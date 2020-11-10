@@ -103,7 +103,9 @@ resource "aws_instance" "cluster_vms" {
   }
 
   tags = {
-    Name    = "bhofmann-cluster-vm-${count.index}"
-    Creator = "bhofmann"
+    Name        = "bhofmann-cluster-vm-${count.index}"
+    Creator     = "bhofmann"
+    Owner       = "bhofmann"
+    DoNotDelete = "true"
   }
 }

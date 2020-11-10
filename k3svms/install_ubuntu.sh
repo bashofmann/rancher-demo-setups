@@ -6,27 +6,29 @@ $(terraform output -state=terraform.tfstate -json node_ips | jq -r 'keys[] as $k
 
 k3sup install \
   --ip $IP0 \
-  --user root \
+  --user ubuntu \
   --cluster \
   --k3s-channel latest
 
 k3sup join \
   --ip $IP1 \
-  --user root \
-  --server-user root \
+  --user ubuntu \
+  --server-user ubuntu \
   --server-ip $IP0 \
   --server \
   --k3s-channel latest
 
 k3sup join \
   --ip $IP2 \
-  --user root \
-  --server-user root \
+  --user ubuntu \
+  --server-user ubuntu \
   --server-ip $IP0 \
   --server \
   --k3s-channel latest
 
-export KUBECONFIG=kubeconfig
+mv kubeconfig kubeconfig_rancher
+
+export KUBECONFIG=kubeconfig_rancher
 
 helm upgrade --install \
   cert-manager jetstack/cert-manager \
@@ -39,7 +41,13 @@ kubectl rollout status deployment -n cert-manager cert-manager-webhook
 
 helm upgrade --install rancher rancher-latest/rancher \
   --namespace cattle-system \
-  --version 2.5.1 \
+  --version 2.5.2-rc9 \
   --set hostname=rancher.${IP0}.xip.io --create-namespace
 
-watch kubectl get pods,ingress -A  
+watch kubectl get pods,ingress -A
+#
+#
+#helm repo update && helm upgrade --install rancher rancher-latest/rancher \
+#  --namespace cattle-system \
+#  --version 2.5.1 \
+#  --reuse-values

@@ -40,6 +40,8 @@ resource "aws_instance" "k3s" {
   }
 
   tags = {
-    Name = "${var.prefix}-k3s"
+    Name        = "${var.prefix}-k3s-${count.index}"
+    Owner       = "bhofmann"
+    DoNotDelete = "true"
   }
 }
