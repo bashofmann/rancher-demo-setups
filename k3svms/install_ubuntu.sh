@@ -8,6 +8,7 @@ k3sup install \
   --ip $IP0 \
   --user ubuntu \
   --cluster \
+  --k3s-extra-args "--node-external-ip ${IP0}" \
   --k3s-channel latest
 
 k3sup join \
@@ -16,6 +17,7 @@ k3sup join \
   --server-user ubuntu \
   --server-ip $IP0 \
   --server \
+  --k3s-extra-args "--node-external-ip ${IP1}" \
   --k3s-channel latest
 
 k3sup join \
@@ -24,6 +26,7 @@ k3sup join \
   --server-user ubuntu \
   --server-ip $IP0 \
   --server \
+  --k3s-extra-args "--node-external-ip ${IP2}" \
   --k3s-channel latest
 
 mv kubeconfig kubeconfig_rancher
@@ -41,7 +44,7 @@ kubectl rollout status deployment -n cert-manager cert-manager-webhook
 
 helm upgrade --install rancher rancher-latest/rancher \
   --namespace cattle-system \
-  --version 2.5.2-rc9 \
+  --version 2.5.2 \
   --set hostname=rancher.${IP0}.xip.io --create-namespace
 
 watch kubectl get pods,ingress -A
