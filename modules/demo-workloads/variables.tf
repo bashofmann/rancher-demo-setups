@@ -13,9 +13,6 @@ variable "email" {
 variable "cluster_id" {
   type = string
 }
-variable "rancher_system_project_id" {
-  type = string
-}
 variable "ingress_base_domain" {
   type = string
 }

@@ -29,7 +29,7 @@ k3sup join \
   --k3s-extra-args "--node-external-ip ${IP2}" \
   --k3s-channel latest
 
-export KUBECONFIG=kubeconfig
+export KUBECONFIG=$(pwd)/kubeconfig
 
 helm upgrade --install \
   cert-manager jetstack/cert-manager \

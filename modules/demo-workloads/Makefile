@@ -17,22 +17,16 @@ install-sealed-secrets:
 install-cert-manager:
 	kubectl create namespace istio-system || true
 	kubectl create namespace cert-manager || true
-	kubectl label namespace cert-manager field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
-	kubectl annotate namespace cert-manager field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
 	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.0.4 --set installCRDs=true --wait
 	cat cert-manager/clusterissuer.yaml | envsubst | kubectl apply -f -
 	cat cert-manager/credentials-secret.yaml | envsubst | kubectl apply -f -
 
 install-external-dns:
 	kubectl create namespace external-dns || true
-	kubectl label namespace external-dns field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
-	kubectl annotate namespace external-dns field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
 	helm upgrade --install external-dns bitnami/external-dns --namespace=external-dns --version 3.2.5 -f external-dns/values.yaml --set digitalocean.apiToken=$(DIGITALOCEAN_TOKEN) --set txtOwnerId=$(DNS_TXT_OWNER_ID)
 
 install-mysql-operator:
 	kubectl create namespace mysql-operator || true
-	kubectl label namespace mysql-operator field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
-	kubectl annotate namespace mysql-operator field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
 	kubectl apply -f mysql-operator/basic-auth.yaml
 	cat mysql-operator/values.yaml | envsubst | helm upgrade --install mysql-operator presslabs/mysql-operator --namespace mysql-operator --version 0.4.0 -f -
 
@@ -58,48 +52,33 @@ install-rancher-demo:
 
 install-loki:
 	kubectl create namespace loki || true
-	kubectl label namespace loki field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
-	kubectl annotate namespace loki field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
 	helm upgrade --install loki loki/loki-stack --namespace loki --version 0.38.3 -f loki/values.yaml
 	#kubectl apply -f loki/datasource.yaml
 	#kubectl rollout restart deployment -n cattle-prometheus grafana-cluster-monitoring
 
 install-rio:
 	# rio install --email $(EMAIL)
-	# kubectl label namespace linkerd field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
-	# kubectl label namespace rio-system field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
-
 install-argocd:
 	kubectl create namespace argocd || true
-	kubectl label namespace argocd field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
-	kubectl annotate namespace argocd field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
 	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
 	cat argocd/ingress.yaml | envsubst | kubectl apply -f -
 
 install-nexus:
 	kubectl create namespace nexus || true
-	kubectl label namespace nexus field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
-	kubectl annotate namespace nexus field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
 	helm upgrade --install nexus oteemo/sonatype-nexus --namespace nexus --version 2.1.0 -f nexus/values.yaml
 
 install-keycloak:
 	kubectl create namespace keycloak || true
-	kubectl label namespace keycloak field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
-	kubectl annotate namespace keycloak field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
 	helm upgrade --install keycloak codecentric/keycloak --namespace keycloak --version 9.0.1 -f keycloak/values.yaml
 
 install-elk:
 	kubectl create namespace logging || true
-	kubectl label namespace logging field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
-	kubectl annotate namespace logging field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
 	kubectl apply -f elk/basic-auth.yaml
 	helm upgrade --install elasticsearch elastic/elasticsearch --version 7.8.1 --namespace logging -f elk/elasticsearch/values.yaml
 	helm upgrade --install kibana elastic/kibana --version 7.8.1 --namespace logging -f elk/kibana/values.yaml
 
 install-weave-scope:
 	kubectl create namespace weave-scope || true
-	kubectl label namespace weave-scope field.cattle.io/projectId=$(RANCHER_SYSTEM_PROJECT_ID) || true
-	kubectl annotate namespace weave-scope field.cattle.io/projectId=$(CLUSTER_ID):$(RANCHER_SYSTEM_PROJECT_ID) || true
 	kubectl apply -f weave-scope/basic-auth.yaml
 	cat weave-scope/values.yaml | envsubst | helm upgrade --install weave-scope  stable/weave-scope  --namespace weave-scope  --version 1.1.10 -f -
 
