@@ -48,9 +48,3 @@ helm upgrade --install rancher rancher-latest/rancher \
   --set hostname=rancher.${IP0}.xip.io --create-namespace
 
 watch kubectl get pods,ingress -A
-#
-#
-#helm repo update && helm upgrade --install rancher rancher-latest/rancher \
-#  --namespace cattle-system \
-#  --version 2.5.1 \
-#  --reuse-values

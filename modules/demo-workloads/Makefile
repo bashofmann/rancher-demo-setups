@@ -19,8 +19,7 @@ add-helm-repos:
 	helm repo update
 
 install-rancher-addons:
-	kubectl config use-context bhofmann-demo-bhofmann-demo-control1
-	kubectl create namespace cattle-dashboards || true
+	kubectl config use-context bhofmann-demo-bhofmann-demo-control1 || true
 	helm upgrade --install --namespace cattle-monitoring-system rancher-monitoring-crd rancher-charts/rancher-monitoring-crd --create-namespace --wait
 	helm upgrade --install --namespace cattle-monitoring-system rancher-monitoring rancher-charts/rancher-monitoring --create-namespace
 	helm upgrade --install --namespace cattle-logging-system rancher-logging-crd rancher-charts/rancher-logging-crd --create-namespace --wait
@@ -28,7 +27,7 @@ install-rancher-addons:
 	helm upgrade --install --namespace istio-system rancher-kiali-server-crd rancher-charts/rancher-kiali-server-crd --create-namespace --wait
 	helm upgrade --install --namespace istio-system rancher-istio rancher-charts/rancher-istio --create-namespace
 	helm upgrade --install --namespace longhorn-system longhorn-crd rancher-charts/longhorn-crd --create-namespace --wait
-	helm upgrade --install --namespace longhorn-system longhorn rancher-charts/longhorn --create-namespace
+	helm upgrade --install --namespace longhorn-system longhorn rancher-charts/longhorn --create-namespace --set csi.kubeletRootDir=/var/lib/kubelet
 
 install-sealed-secrets:
 	helm upgrade --install --namespace kube-system sealed-secrets-controller stable/sealed-secrets  --version v1.10.3
