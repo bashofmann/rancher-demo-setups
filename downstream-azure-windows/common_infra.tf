@@ -14,5 +14,5 @@ resource "azurerm_subnet" "demo-windows-internal" {
   name                 = "${var.prefix}-network-internal"
   resource_group_name  = azurerm_resource_group.demo-windows.name
   virtual_network_name = azurerm_virtual_network.demo-windows.name
-  address_prefix       = "10.0.0.0/16"
+  address_prefixes     = ["10.0.0.0/16"]
 }
