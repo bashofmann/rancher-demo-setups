@@ -2,23 +2,23 @@
 # sudo usermod -aG docker centos
 
 nodes:
-  - address: 18.185.38.80
+  - address: ${IP0}
     user: ubuntu
     role:
       - controlplane
       - etcd
       - worker
-  - address: 35.158.116.137
+  - address: ${IP1}
     user: ubuntu
     role:
       - controlplane
       - etcd
       - worker
-  - address: 18.192.178.59
+  - address: ${IP2}
     user: ubuntu
     role:
       - controlplane
       - etcd
       - worker
 
-kubernetes_version: v1.19.3-rancher1-1
+kubernetes_version: v1.19.4-rancher1-1
