@@ -8,10 +8,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - rancher-demo.${INGRESS_BASE_DOMAIN}
+        - rancher-demo.k8s-demo.plgrnd.be
       secretName: rancher-demo-tls
   rules:
-  - host: rancher-demo.${INGRESS_BASE_DOMAIN}
+  - host: rancher-demo.k8s-demo.plgrnd.be
     http:
       paths:
       - backend:

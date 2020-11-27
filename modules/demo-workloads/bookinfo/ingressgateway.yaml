@@ -14,7 +14,7 @@ spec:
     tls:
       httpsRedirect: true
     hosts:
-    - bookinfo.istio.plgrnd.be
+    - bookinfo.k8s-demo.plgrnd.be
   - port:
       number: 443
       name: https
@@ -23,7 +23,7 @@ spec:
       mode: SIMPLE
       credentialName: bookinfo-tls-certificate-certs
     hosts:
-    - bookinfo.istio.plgrnd.be
+    - bookinfo.k8s-demo.plgrnd.be
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService

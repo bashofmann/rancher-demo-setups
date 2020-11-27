@@ -7,10 +7,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - demo-shop.${INGRESS_BASE_DOMAIN}
+        - demo-shop.k8s-demo.plgrnd.be
       secretName: demo-shop-tls
   rules:
-    - host: demo-shop.${INGRESS_BASE_DOMAIN}
+    - host: demo-shop.k8s-demo.plgrnd.be
       http:
         paths:
           - path: /

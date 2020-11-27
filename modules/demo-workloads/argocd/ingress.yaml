@@ -10,10 +10,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - argocd.${INGRESS_BASE_DOMAIN}
+        - argocd.k8s-demo.plgrnd.be
       secretName: argocd-secret
   rules:
-  - host: argocd.${INGRESS_BASE_DOMAIN}
+  - host: argocd.k8s-demo.plgrnd.be
     http:
       paths:
       - backend:

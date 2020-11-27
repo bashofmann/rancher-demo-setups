@@ -1,0 +1,12 @@
+externalURL: https://harbor.k8s-demo.plgrnd.be
+expose:
+  ingress:
+    hosts:
+      core: harbor.k8s-demo.plgrnd.be
+  tls:
+    certSource: secret
+    secret:
+      secretName: harbor-harbor-ingress
+
+notary:
+  enabled: false

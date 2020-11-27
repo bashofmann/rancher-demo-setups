@@ -1,13 +1,13 @@
 ingress:
   enabled: true
   hosts:
-   - kibana.plgrnd.be
+   - kibana.k8s-demo.plgrnd.be
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/auth-type: basic
     nginx.ingress.kubernetes.io/auth-secret: basic-auth
   tls:
    - hosts:
-      - kibana.plgrnd.be
+      - kibana.k8s-demo.plgrnd.be
      secretName: kibana-tls
 

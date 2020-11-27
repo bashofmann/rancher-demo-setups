@@ -9,6 +9,7 @@ domainFilters:
   - plgrnd.be
 interval: "1m"
 registry: "txt"
+txtOwnerId: rancher-demo
 policy: sync
 resources:
   limits:

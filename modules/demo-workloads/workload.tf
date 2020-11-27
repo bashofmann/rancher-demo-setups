@@ -12,9 +12,7 @@ resource "null_resource" "workload" {
       EMAIL                      = var.email
       DIGITALOCEAN_TOKEN         = var.digitalocean_token
       ENCODED_DIGITALOCEAN_TOKEN = base64encode(var.digitalocean_token)
-      DNS_TXT_OWNER_ID           = var.dns_txt_owner_id
-      INGRESS_BASE_DOMAIN        = var.ingress_base_domain
-      CLUSTER_ID                 = var.cluster_id
+      HELM_EXPERIMENTAL_OCI      = 1
     }
   }
 }

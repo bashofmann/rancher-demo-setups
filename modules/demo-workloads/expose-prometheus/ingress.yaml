@@ -10,10 +10,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - prometheus.rancher-demo.plgrnd.be
+        - prometheus.k8s-demo.plgrnd.be
       secretName: prometheus-demo-tls
   rules:
-  - host: prometheus.rancher-demo.plgrnd.be
+  - host: prometheus.k8s-demo.plgrnd.be
     http:
       paths:
       - backend:

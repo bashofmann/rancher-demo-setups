@@ -5,7 +5,7 @@ metadata:
   namespace: istio-system
 spec:
   dnsNames:
-  - shop.istio.plgrnd.be
+  - shop-istio.k8s-demo.plgrnd.be
   issuerRef:
     group: cert-manager.io
     kind: ClusterIssuer

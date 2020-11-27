@@ -9,10 +9,10 @@ orchestrator:
       nginx.ingress.kubernetes.io/auth-type: basic
       nginx.ingress.kubernetes.io/auth-secret: basic-auth
     hosts:
-    - host: mysql-operator.rancher-demo.plgrnd.be
+    - host: mysql-operator.k8s-demo.plgrnd.be
       paths:
         - /
     tls:
       - secretName: mysql-operator-tls
         hosts:
-          - mysql-operator.rancher-demo.plgrnd.be
+          - mysql-operator.k8s-demo.plgrnd.be

@@ -12,8 +12,8 @@ weave-scope-frontend:
     paths:
       - /
     hosts:
-      - weave-scope.${INGRESS_BASE_DOMAIN}
+      - weave-scope.k8s-demo.plgrnd.be
     tls:
       - secretName: weave-scope-tls
         hosts:
-          - weave-scope.${INGRESS_BASE_DOMAIN}
+          - weave-scope.k8s-demo.plgrnd.be

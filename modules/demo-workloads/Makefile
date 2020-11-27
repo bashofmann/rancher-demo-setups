@@ -1,4 +1,4 @@
-install: add-helm-repos install-sealed-secrets install-cert-manager install-external-dns install-demo-shop install-rancher-demo install-mysql-operator install-loki install-rio install-argocd install-weave-scope helm-whatup
+install: add-helm-repos install-rancher-addons install-sealed-secrets install-cert-manager install-external-dns install-harbor install-demo-shop install-rancher-demo install-mysql-operator install-loki install-rio install-argocd install-weave-scope
 
 add-helm-repos:
 	helm repo add stable https://charts.helm.sh/stable
@@ -9,21 +9,38 @@ add-helm-repos:
 	helm repo add codecentric https://codecentric.github.io/helm-charts
 	helm repo add elastic https://helm.elastic.co
 	helm repo add harbor https://helm.goharbor.io
+	helm repo add bitnami https://charts.bitnami.com/bitnami
+	helm repo add linkerd https://helm.linkerd.io/stable
+	helm repo add longhorn https://charts.longhorn.io
+	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+	helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+	helm repo add trow https://trow.io
+	helm repo add rancher-charts https://charts.rancher.io
 	helm repo update
+
+install-rancher-addons:
+	kubectl config use-context bhofmann-demo-bhofmann-demo-control1
+	kubectl create namespace cattle-dashboards || true
+	helm upgrade --install --namespace cattle-monitoring-system rancher-monitoring-crd rancher-charts/rancher-monitoring-crd --create-namespace --wait
+	helm upgrade --install --namespace cattle-monitoring-system rancher-monitoring rancher-charts/rancher-monitoring --create-namespace
+	helm upgrade --install --namespace cattle-logging-system rancher-logging-crd rancher-charts/rancher-logging-crd --create-namespace --wait
+	helm upgrade --install --namespace cattle-logging-system rancher-logging rancher-charts/rancher-logging --create-namespace
+	helm upgrade --install --namespace istio-system rancher-kiali-server-crd rancher-charts/rancher-kiali-server-crd --create-namespace --wait
+	helm upgrade --install --namespace istio-system rancher-istio rancher-charts/rancher-istio --create-namespace
+	helm upgrade --install --namespace longhorn-system longhorn-crd rancher-charts/longhorn-crd --create-namespace --wait
+	helm upgrade --install --namespace longhorn-system longhorn rancher-charts/longhorn --create-namespace
 
 install-sealed-secrets:
 	helm upgrade --install --namespace kube-system sealed-secrets-controller stable/sealed-secrets  --version v1.10.3
 
 install-cert-manager:
 	kubectl create namespace istio-system || true
-	kubectl create namespace cert-manager || true
-	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.0.4 --set installCRDs=true --wait
+	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.0.4 --set installCRDs=true --wait --create-namespace
 	cat cert-manager/clusterissuer.yaml | envsubst | kubectl apply -f -
 	cat cert-manager/credentials-secret.yaml | envsubst | kubectl apply -f -
 
 install-external-dns:
-	kubectl create namespace external-dns || true
-	helm upgrade --install external-dns bitnami/external-dns --namespace=external-dns --version 3.2.5 -f external-dns/values.yaml --set digitalocean.apiToken=$(DIGITALOCEAN_TOKEN) --set txtOwnerId=$(DNS_TXT_OWNER_ID)
+	helm upgrade --install external-dns bitnami/external-dns --namespace=external-dns --version 3.2.5 -f external-dns/values.yaml --set digitalocean.apiToken=$(DIGITALOCEAN_TOKEN) --create-namespace
 
 install-mysql-operator:
 	kubectl create namespace mysql-operator || true
@@ -51,10 +68,10 @@ install-rancher-demo:
 	cat rancher-demo/ingress.yaml | envsubst | kubectl apply -f -
 
 install-loki:
-	kubectl create namespace loki || true
-	helm upgrade --install loki loki/loki-stack --namespace loki --version 0.38.3 -f loki/values.yaml
-	#kubectl apply -f loki/datasource.yaml
-	#kubectl rollout restart deployment -n cattle-prometheus grafana-cluster-monitoring
+	helm upgrade --install loki loki/loki --namespace loki --version 2.1.0 -f loki/values.yaml --create-namespace
+	kubectl apply -f loki/datasource.yaml
+	kubectl apply -f loki/logging-flow.yaml
+	kubectl rollout restart deployment -n cattle-monitoring-system rancher-monitoring-grafana
 
 install-rio:
 	# rio install --email $(EMAIL)
@@ -64,12 +81,10 @@ install-argocd:
 	cat argocd/ingress.yaml | envsubst | kubectl apply -f -
 
 install-nexus:
-	kubectl create namespace nexus || true
-	helm upgrade --install nexus oteemo/sonatype-nexus --namespace nexus --version 2.1.0 -f nexus/values.yaml
+	helm upgrade --install nexus oteemo/sonatype-nexus --namespace nexus --version 2.1.0 -f nexus/values.yaml --create-namespace
 
 install-keycloak:
-	kubectl create namespace keycloak || true
-	helm upgrade --install keycloak codecentric/keycloak --namespace keycloak --version 9.0.1 -f keycloak/values.yaml
+	helm upgrade --install keycloak codecentric/keycloak --namespace keycloak --version 9.0.1 -f keycloak/values.yaml --create-namespace
 
 install-elk:
 	kubectl create namespace logging || true
@@ -83,20 +98,19 @@ install-weave-scope:
 	cat weave-scope/values.yaml | envsubst | helm upgrade --install weave-scope  stable/weave-scope  --namespace weave-scope  --version 1.1.10 -f -
 
 install-trow:
-	helm repo add trow https://trow.io
 	kubectl create namespace trow || true
 	kubectl apply -f trow/issuer.yaml
 	helm upgrade --install -f trow/values.yaml trow trow/trow --namespace trow
 
 install-harbor:
+	mkdir -p exported-charts
 	kubectl create namespace harbor || true
-	helm upgrade --install harbor harbor/harbor --version 1.5.0 --namespace harbor -f harbor/values.yaml
+	helm chart pull registry.suse.com/harbor/harbor:1.5
+	helm chart export registry.suse.com/harbor/harbor:1.5 -d ./exported-charts
+	helm upgrade --install harbor ./exported-charts/harbor --namespace harbor -f harbor/harbor-values.yaml
 	kubectl apply -f harbor/certificate.yaml
 
 troubleshoot-network:
 	kubectl apply -f network-debugging
 	kubectl rollout status daemonset -n default overlaytest
 	echo "=> Start network overlay test"; kubectl -n default get pods -l name=overlaytest -o jsonpath='{range .items[*]}{@.metadata.name}{" "}{@.spec.nodeName}{"\n"}{end}' | while read spod shost; do kubectl -n default get pods -l name=overlaytest -o jsonpath='{range .items[*]}{@.status.podIP}{" "}{@.spec.nodeName}{"\n"}{end}' | while read tip thost; do kubectl -n default --request-timeout='10s' exec $spod -- /bin/sh -c "ping -c2 $tip > /dev/null 2>&1"; RC=$?; if [ $RC -ne 0 ]; then echo $shost cannot reach $thost; fi; done; done; echo "=> End network overlay test"
-
-helm-whatup:
-#	helm whatup does not work with helm3 yet

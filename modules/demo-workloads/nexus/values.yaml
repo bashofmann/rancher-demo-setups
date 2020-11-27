@@ -1,8 +1,8 @@
 nexusProxy:
   enabled: false
   env:
-    nexusDockerHost: nexus-registry.rancher-aws.plgrnd.be
-    nexusHttpHost: nexus.rancher-aws.plgrnd.be
+    nexusDockerHost: nexus-registry.k8s-demo.plgrnd.be
+    nexusHttpHost: nexus.k8s-demo.plgrnd.be
 
 service:
   enabled: true
@@ -18,7 +18,7 @@ ingress:
     cert-manager.io/cluster-issuer: letsencrypt-prod
     nginx.ingress.kubernetes.io/proxy-body-size: 700m
   rules:
-    - host: nexus-registry.rancher-aws.plgrnd.be
+    - host: nexus-registry.k8s-demo.plgrnd.be
       http:
         paths:
           - backend:
