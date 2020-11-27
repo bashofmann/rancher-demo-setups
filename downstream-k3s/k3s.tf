@@ -9,4 +9,8 @@ resource "null_resource" "k3s" {
       IP4 = aws_instance.k3s[4].public_ip
     }
   }
+  provisioner "local-exec" {
+    when    = destroy
+    command = "rm kubeconfig"
+  }
 }

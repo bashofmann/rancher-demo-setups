@@ -33,7 +33,18 @@ resource "aws_instance" "k3s" {
   root_block_device {
     volume_size = 80
   }
+  provisioner "remote-exec" {
+    inline = [
+      "cloud-init status --wait"
+    ]
 
+    connection {
+      type        = "ssh"
+      host        = self.public_ip
+      user        = "ubuntu"
+      private_key = file(var.ssh_key_file_name)
+    }
+  }
   tags = {
     Name        = "${var.prefix}-k3s-downstream-${count.index}"
     Owner       = "bhofmann"
