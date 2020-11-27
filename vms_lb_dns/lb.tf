@@ -1,6 +1,7 @@
 resource "aws_elb" "rancher-server-lb" {
-  name               = "${var.prefix}-rancher-server-lb"
-  availability_zones = aws_instance.vmlb[*].availability_zone
+  name            = "${var.prefix}-rancher-server-lb"
+  subnets         = [aws_subnet.eu-central-1a-public.id]
+  security_groups = [aws_security_group.rancher.id]
 
   listener {
     instance_port     = 80
@@ -37,6 +38,11 @@ resource "aws_elb" "rancher-server-lb" {
   tags = {
     Name = "${var.prefix}-vmlb-lb"
   }
+}
+
+resource "aws_proxy_protocol_policy" "smtp" {
+  load_balancer  = aws_elb.rancher-server-lb.name
+  instance_ports = ["80", "443"]
 }
 
 data "digitalocean_domain" "zone" {
