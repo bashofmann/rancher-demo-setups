@@ -25,10 +25,10 @@ resource "azurerm_linux_virtual_machine" "linux-server" {
   size                  = "Standard_B2MS"
   admin_username        = "ubuntu"
 
-  custom_data = base64encode(templatefile("../userdata/server.sh", {
+  custom_data = base64encode(templatefile("userdata/server.sh", {
     docker_version   = var.docker_version
     username         = "ubuntu"
-    register_command = ""
+    register_command = rancher2_cluster.cluster.cluster_registration_token.0.node_command
   }))
 
   source_image_reference {

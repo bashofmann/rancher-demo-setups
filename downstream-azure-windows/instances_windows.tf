@@ -39,3 +39,24 @@ resource "azurerm_windows_virtual_machine" "windows-server" {
     version   = "latest"
   }
 }
+
+# Join windows not to the cluster
+resource "azurerm_virtual_machine_extension" "join-rancher" {
+  name                 = "${var.prefix}-windows-node-join-rancher"
+  virtual_machine_id   = azurerm_windows_virtual_machine.windows-server.id
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.9"
+
+  settings = <<SETTINGS
+    {
+        "commandToExecute": ${jsonencode(
+  replace(
+    rancher2_cluster.cluster.cluster_registration_token.0.windows_node_command,
+    "| iex}",
+    "--address ${azurerm_windows_virtual_machine.windows-server.public_ip_address} --internal-address ${azurerm_windows_virtual_machine.windows-server.private_ip_address} --worker | iex}",
+  )
+)}
+    }
+SETTINGS
+}
