@@ -4,7 +4,7 @@ resource "aws_key_pair" "quickstart_key_pair" {
 }
 
 resource "aws_security_group" "rancher_sg_allowall" {
-  name        = "${var.prefix}-k3s-allowall"
+  name        = "${var.prefix}-k3sdown-allowall"
   description = "Rancher quickstart - allow all traffic"
 
   ingress {
