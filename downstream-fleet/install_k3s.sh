@@ -4,6 +4,6 @@ set -e
 
 k3sup install \
   --ip $IP \
-  --user ubuntu \
+  --user ec2-user \
   --k3s-extra-args "--node-external-ip ${IP}" \
   --k3s-channel latest

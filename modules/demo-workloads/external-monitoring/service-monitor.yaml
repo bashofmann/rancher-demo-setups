@@ -31,7 +31,7 @@ metadata:
   namespace: cattle-monitoring-system
 spec:
   type: ExternalName
-#  externalName: ${EXTERNAL_IP}
+  externalName: external
   clusterIP: ""
   ports:
     - port: 9100
@@ -52,7 +52,9 @@ metadata:
   namespace: cattle-monitoring-system
 subsets:
   - addresses:
-      - ip: ${EXTERNAL_IP}
+      - ip:
+      - ip:
+      - ip:
     ports:
       - port: 9100
         name: node-exporter

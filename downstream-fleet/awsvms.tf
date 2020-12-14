@@ -24,7 +24,7 @@ resource "aws_security_group" "sg_allowall" {
 
 resource "aws_instance" "amd_vms" {
   count         = 2
-  ami           = data.aws_ami.ubuntu.id
+  ami           = data.aws_ami.sles.id
   instance_type = "t3a.medium"
 
   key_name        = aws_key_pair.ssh_key_pair.key_name
@@ -42,7 +42,7 @@ resource "aws_instance" "amd_vms" {
     connection {
       type        = "ssh"
       host        = self.public_ip
-      user        = "ubuntu"
+      user        = "ec2-user"
       private_key = file(var.ssh_key_file_name)
     }
   }
@@ -54,7 +54,7 @@ resource "aws_instance" "amd_vms" {
 
 resource "aws_instance" "arm_vms" {
   count         = 1
-  ami           = data.aws_ami.arm.id
+  ami           = data.aws_ami.slesarm.id
   instance_type = "a1.medium"
 
   key_name        = aws_key_pair.ssh_key_pair.key_name
@@ -68,7 +68,7 @@ resource "aws_instance" "arm_vms" {
     connection {
       type        = "ssh"
       host        = self.public_ip
-      user        = "ubuntu"
+      user        = "ec2-user"
       private_key = file(var.ssh_key_file_name)
     }
   }
