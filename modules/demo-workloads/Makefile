@@ -39,7 +39,7 @@ install-cert-manager:
 	cat cert-manager/credentials-secret.yaml | envsubst | kubectl apply -f -
 
 install-external-dns:
-	helm upgrade --install external-dns bitnami/external-dns --namespace=external-dns --version 3.2.5 -f external-dns/values.yaml --set digitalocean.apiToken=$(DIGITALOCEAN_TOKEN) --create-namespace
+	helm upgrade --install external-dns bitnami/external-dns --namespace=external-dns --version 4.4.3 -f external-dns/values.yaml --set digitalocean.apiToken=$(DIGITALOCEAN_TOKEN) --create-namespace
 
 install-mysql-operator:
 	kubectl create namespace mysql-operator || true
