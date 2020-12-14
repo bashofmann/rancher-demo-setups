@@ -1,0 +1,62 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: edge-clusters
+  namespace: cattle-monitoring-system
+spec:
+  endpoints:
+    - interval: 1m
+      honorLabels: true
+      scrapeTimeout: 55s
+      path: "/metrics"
+      port: node-exporter
+    - interval: 1m
+      honorLabels: true
+      scrapeTimeout: 55s
+      path: "/metrics"
+      port: kube-state-metrics
+  namespaceSelector:
+    matchNames:
+      - cattle-monitoring-system
+  selector:
+    matchLabels:
+      cluster: edge-clusters
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: edge-clusters
+  labels:
+    cluster: edge-clusters
+  namespace: cattle-monitoring-system
+spec:
+  type: ExternalName
+#  externalName: ${EXTERNAL_IP}
+  clusterIP: ""
+  ports:
+    - port: 9100
+      targetPort: 9100
+      name: node-exporter
+      protocol: TCP
+    - port: 30080
+      targetPort: 30080
+      name: kube-state-metrics
+      protocol: TCP
+---
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: edge-clusters
+  labels:
+    cluster: edge-clusters
+  namespace: cattle-monitoring-system
+subsets:
+  - addresses:
+      - ip: ${EXTERNAL_IP}
+    ports:
+      - port: 9100
+        name: node-exporter
+        protocol: TCP
+      - port: 30080
+        name: kube-state-metrics
+        protocol: TCP
