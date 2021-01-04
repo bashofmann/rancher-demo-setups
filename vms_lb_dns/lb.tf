@@ -40,10 +40,10 @@ resource "aws_elb" "rancher-server-lb" {
   }
 }
 
-resource "aws_proxy_protocol_policy" "smtp" {
-  load_balancer  = aws_elb.rancher-server-lb.name
-  instance_ports = ["80", "443"]
-}
+//resource "aws_proxy_protocol_policy" "smtp" {
+//  load_balancer  = aws_elb.rancher-server-lb.name
+//  instance_ports = ["80", "443"]
+//}
 
 data "digitalocean_domain" "zone" {
   name = "plgrnd.be"
