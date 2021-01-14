@@ -21,25 +21,26 @@ add-helm-repos:
 install-rancher-addons:
 	kubectl config use-context bhofmann-demo-bhofmann-demo-control1 || true
 	helm upgrade --install --namespace cattle-monitoring-system rancher-monitoring-crd rancher-charts/rancher-monitoring-crd --create-namespace --wait
-	helm upgrade --install --namespace cattle-monitoring-system rancher-monitoring rancher-charts/rancher-monitoring --create-namespace
+	helm upgrade --install --namespace cattle-monitoring-system rancher-monitoring rancher-charts/rancher-monitoring --create-namespace --set prometheus.prometheusSpec.resources.limits.memory=2500Mi
 	helm upgrade --install --namespace cattle-logging-system rancher-logging-crd rancher-charts/rancher-logging-crd --create-namespace --wait
 	helm upgrade --install --namespace cattle-logging-system rancher-logging rancher-charts/rancher-logging --create-namespace
 	helm upgrade --install --namespace istio-system rancher-kiali-server-crd rancher-charts/rancher-kiali-server-crd --create-namespace --wait
 	helm upgrade --install --namespace istio-system rancher-istio rancher-charts/rancher-istio --create-namespace
 	helm upgrade --install --namespace longhorn-system longhorn-crd rancher-charts/longhorn-crd --create-namespace --wait
-	helm upgrade --install --namespace longhorn-system longhorn rancher-charts/longhorn --create-namespace --set csi.kubeletRootDir=/var/lib/kubelet
+	helm upgrade --install --namespace longhorn-system longhorn rancher-charts/longhorn --create-namespace
+	kubectl apply -f longhorn_monitoring/
 
 install-sealed-secrets:
 	helm upgrade --install --namespace kube-system sealed-secrets-controller stable/sealed-secrets  --version v1.10.3
 
 install-cert-manager:
 	kubectl create namespace istio-system || true
-	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.0.4 --set installCRDs=true --wait --create-namespace
+	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.1.0 --set installCRDs=true --wait --create-namespace
 	cat cert-manager/clusterissuer.yaml | envsubst | kubectl apply -f -
 	cat cert-manager/credentials-secret.yaml | envsubst | kubectl apply -f -
 
 install-external-dns:
-	helm upgrade --install external-dns bitnami/external-dns --namespace=external-dns --version 4.4.3 -f external-dns/values.yaml --set digitalocean.apiToken=$(DIGITALOCEAN_TOKEN) --create-namespace
+	helm upgrade --install external-dns bitnami/external-dns --namespace=external-dns --version 4.5.1 -f external-dns/values.yaml --set digitalocean.apiToken=$(DIGITALOCEAN_TOKEN) --create-namespace
 
 install-mysql-operator:
 	kubectl create namespace mysql-operator || true
@@ -57,8 +58,8 @@ install-demo-shop:
 install-bookinfo:
 	kubectl create namespace bookinfo || true
 	kubectl label namespace bookinfo istio-injection=enabled || true
-	kubectl apply -n bookinfo -f https://raw.githubusercontent.com/istio/istio/release-1.6/samples/bookinfo/platform/kube/bookinfo.yaml
-	kubectl apply -n bookinfo -f https://raw.githubusercontent.com/istio/istio/release-1.6/samples/bookinfo/networking/destination-rule-all.yaml
+	kubectl apply -n bookinfo -f https://raw.githubusercontent.com/istio/istio/release-1.7/samples/bookinfo/platform/kube/bookinfo.yaml
+	kubectl apply -n bookinfo -f https://raw.githubusercontent.com/istio/istio/release-1.7/samples/bookinfo/networking/destination-rule-all.yaml
 	kubectl apply -f bookinfo
 
 install-rancher-demo:
@@ -67,7 +68,7 @@ install-rancher-demo:
 	cat rancher-demo/ingress.yaml | envsubst | kubectl apply -f -
 
 install-loki:
-	helm upgrade --install loki loki/loki --namespace loki --version 2.1.0 -f loki/values.yaml --create-namespace
+	helm upgrade --install loki loki/loki --namespace loki --version 2.1.1 -f loki/values.yaml --create-namespace
 	kubectl apply -f loki/datasource.yaml
 	kubectl apply -f loki/logging-flow.yaml
 	kubectl rollout restart deployment -n cattle-monitoring-system rancher-monitoring-grafana
