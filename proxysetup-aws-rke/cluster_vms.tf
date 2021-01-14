@@ -84,7 +84,7 @@ resource "aws_instance" "cluster_vms" {
   count = 4
   ami   = data.aws_ami.ubuntu.id
 
-  instance_type = "t3a.medium"
+  instance_type = "t3a.xlarge"
 
   key_name                    = aws_key_pair.ssh_key_pair.key_name
   vpc_security_group_ids      = [aws_security_group.cluster_vms.id]
@@ -96,6 +96,10 @@ resource "aws_instance" "cluster_vms" {
   user_data = templatefile("userdata/cluster_vms.sh", {
     proxy_private_ip = aws_instance.proxy.private_ip
   })
+
+  root_block_device {
+    volume_size = 80
+  }
 
   provisioner "remote-exec" {
     inline = [
