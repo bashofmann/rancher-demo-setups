@@ -25,7 +25,7 @@ variable "prefix" {
 variable "instance_type" {
   type        = string
   description = "Instance type used for all EC2 instances"
-  default     = "t3a.xlarge"
+  default     = "t3a.2xlarge"
 }
 
 variable "ssh_key_file_name" {
