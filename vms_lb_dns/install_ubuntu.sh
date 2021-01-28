@@ -10,7 +10,6 @@ k3sup install \
   --user ubuntu \
   --cluster \
   --k3s-extra-args "--node-external-ip ${IP0}" \
-#  --k3s-extra-args "--no-deploy traefik --node-external-ip ${IP0}" \
   --k3s-channel latest
 
 k3sup join \
@@ -20,8 +19,8 @@ k3sup join \
   --server-ip $IP0 \
   --server \
   --k3s-extra-args "--node-external-ip ${IP1}" \
-#  --k3s-extra-args "--no-deploy traefik --node-external-ip ${IP1}" \
   --k3s-channel latest
+#  --k3s-extra-args "--no-deploy traefik --node-external-ip ${IP1}" \
 
 k3sup join \
   --ip $IP2 \
@@ -30,7 +29,6 @@ k3sup join \
   --server-ip $IP0 \
   --server \
   --k3s-extra-args "--node-external-ip ${IP2}" \
-#  --k3s-extra-args "--no-deploy traefik --node-external-ip ${IP2}" \
   --k3s-channel latest
 
 export KUBECONFIG=$(pwd)/kubeconfig
