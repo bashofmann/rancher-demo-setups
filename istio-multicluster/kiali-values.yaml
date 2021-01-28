@@ -1,0 +1,12 @@
+auth:
+  strategy: anonymous
+deployment:
+  ingress_enabled: false
+  repository: rancher/kiali-kiali
+  tag: v1.24.0
+external_services:
+  prometheus:
+    custom_metrics_url: "http://rancher-monitoring-prometheus.cattle-monitoring-system.svc:9090"
+    url: "http://rancher-monitoring-prometheus.cattle-monitoring-system.svc:9090"
+  tracing:
+    in_cluster_url: "http://tracing.istio-system.svc:16686"

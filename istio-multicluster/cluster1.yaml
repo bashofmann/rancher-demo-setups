@@ -1,0 +1,20 @@
+apiVersion: install.istio.io/v1alpha1
+kind: IstioOperator
+spec:
+#  components:
+#    base:
+#      enabled: true
+#    pilot:
+#      enabled: true
+#  meshConfig:
+#    enablePrometheusMerge: true
+  values:
+    global:
+      meshID: mesh1
+      multiCluster:
+        clusterName: cluster1
+      network: network1
+#    telemetry:
+#      enabled: true
+#      v2:
+#        enabled: true
