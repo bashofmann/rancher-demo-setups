@@ -23,7 +23,7 @@ resource "rancher2_node_template" "controlplane" {
     zone                 = "a"
     root_size            = "10"
     instance_type        = "t3a.medium"
-    iam_instance_profile = "RancherK8SUnrestrictedCloudProviderRoleEU"
+    iam_instance_profile = aws_iam_instance_profile.rke_profile.name
   }
 }
 
@@ -43,6 +43,6 @@ resource "rancher2_node_template" "worker" {
     zone                 = "a"
     root_size            = "20"
     instance_type        = "t3a.xlarge"
-    iam_instance_profile = "RancherK8SUnrestrictedCloudProviderRoleEU"
+    iam_instance_profile = aws_iam_instance_profile.rke_profile.name
   }
 }
