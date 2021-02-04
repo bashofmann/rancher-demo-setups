@@ -25,7 +25,7 @@ install-rancher-addons:
 	helm upgrade --install --namespace cattle-logging-system rancher-logging-crd rancher-charts/rancher-logging-crd --create-namespace --wait
 	helm upgrade --install --namespace cattle-logging-system rancher-logging rancher-charts/rancher-logging --create-namespace
 	helm upgrade --install --namespace istio-system rancher-kiali-server-crd rancher-charts/rancher-kiali-server-crd --create-namespace --wait
-	helm upgrade --install --namespace istio-system rancher-istio rancher-charts/rancher-istio --create-namespace
+	helm upgrade --install --namespace istio-system rancher-istio rancher-charts/rancher-istio --create-namespace --set tracing.enabled=true
 	helm upgrade --install --namespace longhorn-system longhorn-crd rancher-charts/longhorn-crd --create-namespace --wait
 	helm upgrade --install --namespace longhorn-system longhorn rancher-charts/longhorn --create-namespace
 	kubectl apply -f longhorn_monitoring/
