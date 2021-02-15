@@ -23,6 +23,7 @@ resource "rancher2_cluster" "harvester" {
     }
   }
 }
+
 resource "rancher2_node_pool" "harvester" {
   cluster_id       = rancher2_cluster.harvester.id
   name             = "harvester"
