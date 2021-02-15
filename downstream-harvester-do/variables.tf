@@ -1,6 +1,5 @@
 variable "digitalocean_token" {
-  type        = string
-  description = "AWS access key used to create infrastructure"
+  type = string
 }
 variable "rancher_url" {
   type = string
