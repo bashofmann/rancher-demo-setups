@@ -1721,7 +1721,7 @@ spec:
         runbook_url: https://github.com/prometheus-operator/kube-prometheus/wiki/kubeletdown
         summary: Target disappeared from Prometheus target discovery.
       expr: |
-        absent(up{job="expose-kubelets-metrics", metrics_path="/metrics"} == 1)
+        absent(up{job="expose-kubelets-metrics"} == 1)
       for: 15m
       labels:
         severity: critical
@@ -1745,7 +1745,7 @@ spec:
         runbook_url: https://github.com/prometheus-operator/kube-prometheus/wiki/kubecontrollermanagerdown
         summary: Target disappeared from Prometheus target discovery.
       expr: |
-        absent(up{job="kube-controller-manager"} == 1)
+        absent(up{job="expose-kube-cm-metrics"} == 1)
       for: 15m
       labels:
         severity: critical
