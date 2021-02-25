@@ -23,7 +23,7 @@ resource "aws_security_group" "rancher_sg_allowall" {
 }
 
 resource "aws_instance" "k3s" {
-  count         = 3
+  count         = 5
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
 
