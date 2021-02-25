@@ -52,7 +52,7 @@ data "digitalocean_domain" "zone" {
 resource "digitalocean_record" "wildcard" {
   domain = data.digitalocean_domain.zone.name
   type   = "CNAME"
-  name   = "*.k8s-demo"
+  name   = "rancher"
   value  = "${aws_elb.rancher-server-lb.dns_name}."
   ttl    = 60
 }

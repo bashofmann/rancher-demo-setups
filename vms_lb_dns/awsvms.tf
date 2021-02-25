@@ -79,6 +79,12 @@ resource "aws_security_group" "rancher" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
+    from_port   = 9345
+    to_port     = 9345
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
     from_port   = -1
     to_port     = -1
     protocol    = "icmp"
@@ -100,7 +106,7 @@ resource "aws_security_group" "rancher" {
 }
 
 resource "aws_instance" "vmlb" {
-  count         = 6
+  count         = 5
   ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
 

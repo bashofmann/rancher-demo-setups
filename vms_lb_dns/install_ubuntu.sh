@@ -10,7 +10,7 @@ k3sup install \
   --user ubuntu \
   --cluster \
   --k3s-extra-args "--node-external-ip ${IP0}" \
-  --k3s-channel latest
+  --k3s-channel v1.19
 
 k3sup join \
   --ip $IP1 \
@@ -19,8 +19,7 @@ k3sup join \
   --server-ip $IP0 \
   --server \
   --k3s-extra-args "--node-external-ip ${IP1}" \
-  --k3s-channel latest
-#  --k3s-extra-args "--no-deploy traefik --node-external-ip ${IP1}" \
+  --k3s-channel v1.19
 
 k3sup join \
   --ip $IP2 \
@@ -29,7 +28,7 @@ k3sup join \
   --server-ip $IP0 \
   --server \
   --k3s-extra-args "--node-external-ip ${IP2}" \
-  --k3s-channel latest
+  --k3s-channel v1.19
 
 export KUBECONFIG=$(pwd)/kubeconfig
 
@@ -45,6 +44,7 @@ export KUBECONFIG=$(pwd)/kubeconfig
 #  --set-string controller.config.use-proxy-protocol=true \
 #  --set controller.publishService.pathOverride=ingress-nginx/external \
 #  --version 3.12.0 --create-namespace
+helm repo add jetstack https://charts.jetstack.io
 
 helm upgrade --install \
   cert-manager jetstack/cert-manager \
@@ -54,11 +54,12 @@ helm upgrade --install \
 
 kubectl rollout status deployment -n cert-manager cert-manager
 kubectl rollout status deployment -n cert-manager cert-manager-webhook
+helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
 
 helm upgrade --install rancher rancher-latest/rancher \
   --namespace cattle-system \
   --version v2.5.5 \
-  --set hostname=rancher.k8s-demo.plgrnd.be --create-namespace
-#  --set ingress.tls.source=letsEncrypt \
+  --set hostname=rancher.plgrnd.be --create-namespace \
+  --set ingress.tls.source=letsEncrypt
 
 watch kubectl get pods,ingress -A  
