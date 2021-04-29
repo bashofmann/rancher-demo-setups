@@ -3,22 +3,25 @@
 
 nodes:
   - address: ${IP0}
-    user: ubuntu
+    user: ec2-user
     role:
       - controlplane
       - etcd
       - worker
   - address: ${IP1}
-    user: ubuntu
+    user: ec2-user
     role:
       - controlplane
       - etcd
       - worker
   - address: ${IP2}
-    user: ubuntu
+    user: ec2-user
     role:
       - controlplane
       - etcd
       - worker
 
-kubernetes_version: v1.19.4-rancher1-1
+network:
+  plugin: calico
+
+# kubernetes_version: v1.19.4-rancher1-1

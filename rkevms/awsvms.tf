@@ -24,7 +24,7 @@ resource "aws_security_group" "rancher_sg_allowall" {
 
 resource "aws_instance" "rancher-cluster" {
   count         = 3
-  ami           = data.aws_ami.ubuntu.id
+  ami           = data.aws_ami.rhel.id
   instance_type = var.instance_type
 
   key_name        = aws_key_pair.quickstart_key_pair.key_name
@@ -37,8 +37,8 @@ resource "aws_instance" "rancher-cluster" {
   }
 
   user_data = templatefile("../userdata/server.sh", {
-    docker_version = "19.03"
-    username       = local.node_username
+    docker_version = "20.10"
+    username       = "ec2-user"
   })
 
   root_block_device {
@@ -53,7 +53,7 @@ resource "aws_instance" "rancher-cluster" {
     connection {
       type        = "ssh"
       host        = self.public_ip
-      user        = local.node_username
+      user        = "ec2-user"
       private_key = file(var.ssh_key_file_name)
     }
   }

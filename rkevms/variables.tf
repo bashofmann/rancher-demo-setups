@@ -33,9 +33,3 @@ variable "ssh_key_file_name" {
   description = "File path and name of SSH private key used for infrastructure and RKE"
   default     = "~/.ssh/id_rsa"
 }
-
-
-# Local variables used to reduce repetition
-locals {
-  node_username = "ubuntu"
-}
