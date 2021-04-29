@@ -8,7 +8,7 @@ spec:
     istio: ingressgateway
   servers:
   - hosts:
-    - shop-istio.k8s-demo.plgrnd.be
+    - shop-istio.plgrnd.be
     port:
       name: http
       number: 80
@@ -23,7 +23,7 @@ spec:
       mode: SIMPLE
       credentialName: shop-tls-certificate-certs
     hosts:
-    - shop-istio.k8s-demo.plgrnd.be
+    - shop-istio.plgrnd.be
 ---
 apiVersion: networking.istio.io/v1alpha3
 kind: VirtualService
@@ -32,7 +32,7 @@ metadata:
   namespace: shop
 spec:
   hosts:
-  - shop.istio.plgrnd.be
+  - shop-istio.plgrnd.be
   gateways:
   - frontend-gateway
   http:

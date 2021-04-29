@@ -1,7 +1,8 @@
-install: add-helm-repos install-rancher-addons install-sealed-secrets install-cert-manager install-external-dns install-harbor install-demo-shop install-rancher-demo install-mysql-operator install-loki install-rio install-argocd install-weave-scope
+SHELL := /bin/bash
+
+install: add-helm-repos install-rancher-addons install-sealed-secrets install-cert-manager install-external-dns install-harbor install-demo-shop install-rancher-demo install-mysql-operator install-loki
 
 add-helm-repos:
-	helm repo add stable https://charts.helm.sh/stable
 	helm repo add jetstack https://charts.jetstack.io
 	helm repo add presslabs https://presslabs.github.io/charts
 	helm repo add loki https://grafana.github.io/loki/charts
@@ -10,6 +11,7 @@ add-helm-repos:
 	helm repo add elastic https://helm.elastic.co
 	helm repo add harbor https://helm.goharbor.io
 	helm repo add bitnami https://charts.bitnami.com/bitnami
+	helm repo add sealed-secrets https://bitnami-labs.github.io/sealed-secrets/
 	helm repo add linkerd https://helm.linkerd.io/stable
 	helm repo add longhorn https://charts.longhorn.io
 	helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
@@ -26,16 +28,19 @@ install-rancher-addons:
 	helm upgrade --install --namespace cattle-logging-system rancher-logging rancher-charts/rancher-logging --create-namespace
 	helm upgrade --install --namespace istio-system rancher-kiali-server-crd rancher-charts/rancher-kiali-server-crd --create-namespace --wait
 	helm upgrade --install --namespace istio-system rancher-istio rancher-charts/rancher-istio --create-namespace --set tracing.enabled=true
+	kubectl create namespace longhorn-system || true
+	kubectl delete secret -n longhorn-system backup-credentials || true
+	kubectl create secret generic -n longhorn-system backup-credentials --from-env-file=<(tail $(HOME)/.aws/credentials -n 2 | awk '{printf "%s=%s\n",toupper($$1), $$3}')
 	helm upgrade --install --namespace longhorn-system longhorn-crd rancher-charts/longhorn-crd --create-namespace --wait
-	helm upgrade --install --namespace longhorn-system longhorn rancher-charts/longhorn --create-namespace
+	helm upgrade --install --namespace longhorn-system longhorn rancher-charts/longhorn --create-namespace --set "defaultSettings.backupTarget=s3://bhofmann-longhorn-backup@eu-central-1/" --set "defaultSettings.backupTargetCredentialSecret=backup-credentials"
 	kubectl apply -f longhorn_monitoring/
 
 install-sealed-secrets:
-	helm upgrade --install --namespace kube-system sealed-secrets-controller stable/sealed-secrets  --version v1.10.3
+	helm upgrade --install --namespace kube-system sealed-secrets-controller sealed-secrets/sealed-secrets  --version v1.13.2
 
 install-cert-manager:
 	kubectl create namespace istio-system || true
-	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.1.0 --set installCRDs=true --wait --create-namespace
+	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.2.0 --set installCRDs=true --wait --create-namespace
 	cat cert-manager/clusterissuer.yaml | envsubst | kubectl apply -f -
 	cat cert-manager/credentials-secret.yaml | envsubst | kubectl apply -f -
 
@@ -73,8 +78,6 @@ install-loki:
 	kubectl apply -f loki/logging-flow.yaml
 	kubectl rollout restart deployment -n cattle-monitoring-system rancher-monitoring-grafana
 
-install-rio:
-	# rio install --email $(EMAIL)
 install-argocd:
 	kubectl create namespace argocd || true
 	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
@@ -92,15 +95,18 @@ install-elk:
 	helm upgrade --install elasticsearch elastic/elasticsearch --version 7.8.1 --namespace logging -f elk/elasticsearch/values.yaml
 	helm upgrade --install kibana elastic/kibana --version 7.8.1 --namespace logging -f elk/kibana/values.yaml
 
-install-weave-scope:
-	kubectl create namespace weave-scope || true
-	kubectl apply -f weave-scope/basic-auth.yaml
-	cat weave-scope/values.yaml | envsubst | helm upgrade --install weave-scope  stable/weave-scope  --namespace weave-scope  --version 1.1.10 -f -
-
 install-trow:
 	kubectl create namespace trow || true
 	kubectl apply -f trow/issuer.yaml
 	helm upgrade --install -f trow/values.yaml trow trow/trow --namespace trow
+
+install-harbor-standalone:
+	mkdir -p exported-charts
+	kubectl create namespace harbor || true
+	#helm chart pull registry.suse.com/harbor/harbor:1.5
+	#helm chart export registry.suse.com/harbor/harbor:1.5 -d ./exported-charts
+	helm upgrade --install harbor ./exported-charts/harbor --namespace harbor -f harbor-standalone/harbor-values.yaml
+	kubectl apply -f harbor-standalone/certificate.yaml
 
 install-harbor:
 	mkdir -p exported-charts

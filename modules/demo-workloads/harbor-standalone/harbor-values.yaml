@@ -1,0 +1,17 @@
+externalURL: https://registry.plgrnd.be
+expose:
+  ingress:
+    hosts:
+      core: registry.plgrnd.be
+  tls:
+    certSource: secret
+    secret:
+      secretName: harbor-harbor-ingress
+
+notary:
+  enabled: false
+
+persistence:
+  persistentVolumeClaim:
+    registry:
+      size: 25Gi
