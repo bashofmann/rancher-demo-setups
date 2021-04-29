@@ -3,6 +3,7 @@ resource "rancher2_cluster" "fleet_0" {
   labels = {
     cpu      = "amd"
     location = "central"
+    distro   = "k3s"
   }
 }
 resource "rancher2_cluster" "fleet_1" {
@@ -10,6 +11,7 @@ resource "rancher2_cluster" "fleet_1" {
   labels = {
     cpu      = "amd"
     location = "west"
+    distro   = "k3s"
   }
 }
 resource "rancher2_cluster" "fleet_2" {
@@ -17,6 +19,7 @@ resource "rancher2_cluster" "fleet_2" {
   labels = {
     cpu      = "arm"
     location = "central"
+    distro   = "k3s"
   }
 }
 
