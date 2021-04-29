@@ -6,11 +6,6 @@ variable "aws_secret_key" {
   type        = string
   description = "AWS secret key used to create AWS infrastructure"
 }
-variable "aws_region" {
-  type        = string
-  description = "AWS region used for all resources"
-  default     = "eu-central-1"
-}
 variable "rancher_url" {
   type = string
 }

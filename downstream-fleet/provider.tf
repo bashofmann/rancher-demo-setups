@@ -12,9 +12,17 @@ terraform {
 }
 
 provider "aws" {
+  alias      = "aws_eu_west"
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
-  region     = var.aws_region
+  region     = "eu-west-1"
+}
+
+provider "aws" {
+  alias      = "aws_eu_central"
+  access_key = var.aws_access_key
+  secret_key = var.aws_secret_key
+  region     = "eu-central-1"
 }
 
 provider "rancher2" {

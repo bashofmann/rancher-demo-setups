@@ -1,19 +1,22 @@
 resource "rancher2_cluster" "fleet_0" {
   name = "${var.prefix}-fleet-0"
   labels = {
-    group = "amd"
+    cpu      = "amd"
+    location = "central"
   }
 }
 resource "rancher2_cluster" "fleet_1" {
   name = "${var.prefix}-fleet-1"
   labels = {
-    group = "amd"
+    cpu      = "amd"
+    location = "west"
   }
 }
 resource "rancher2_cluster" "fleet_2" {
   name = "${var.prefix}-fleet-2"
   labels = {
-    "group" = "arm"
+    cpu      = "arm"
+    location = "central"
   }
 }
 
