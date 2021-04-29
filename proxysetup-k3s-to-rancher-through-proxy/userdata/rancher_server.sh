@@ -13,6 +13,6 @@ helm upgrade --install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --set installCRDs=true \
-  --version v1.0.4 --create-namespace
+  --version v1.2.0 --create-namespace
 
 kubectl rollout status deployment -n cert-manager cert-manager-webhook
