@@ -87,6 +87,8 @@ install-nexus:
 	helm upgrade --install nexus oteemo/sonatype-nexus --namespace nexus --version 2.1.0 -f nexus/values.yaml --create-namespace
 
 install-keycloak:
+	kubectl create namespace keycloak || true
+	kubectl apply -n keycloak -f keycloak/issuer.yaml
 	helm upgrade --install keycloak codecentric/keycloak --namespace keycloak --version 9.0.1 -f keycloak/values.yaml --create-namespace
 
 install-elk:

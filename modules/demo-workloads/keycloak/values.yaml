@@ -1,14 +1,14 @@
 ingress:
   enabled: true
   annotations:
-    cert-manager.io/cluster-issuer: letsencrypt-prod
+    cert-manager.io/issuer: letsencrypt
   rules:
-    - host: keycloak.k8s-demo.plgrnd.be
+    - host: keycloak.plgrnd.be
       paths:
         - /
   tls:
     - hosts:
-        - keycloak.k8s-demo.plgrnd.be
+        - keycloak.plgrnd.be
       secretName: keycloak-tls
 
 extraEnv: |
@@ -18,4 +18,4 @@ extraEnv: |
     value: admin
   - name: JAVA_OPTS
     value: >-
-      -Dkeycloak.frontendUrl=https://keycloak.k8s-demo.plgrnd.be/auth
+      -Dkeycloak.frontendUrl=https://keycloak.plgrnd.be/auth
