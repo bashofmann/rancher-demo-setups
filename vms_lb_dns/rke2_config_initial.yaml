@@ -1,0 +1,3 @@
+token: my-shared-secret
+tls-san:
+  - kubernetes.plgrnd.be

@@ -40,19 +40,72 @@ resource "aws_elb" "rancher-server-lb" {
   }
 }
 
-//resource "aws_proxy_protocol_policy" "smtp" {
-//  load_balancer  = aws_elb.rancher-server-lb.name
-//  instance_ports = ["80", "443"]
-//}
-
 data "digitalocean_domain" "zone" {
   name = "plgrnd.be"
 }
 
-resource "digitalocean_record" "wildcard" {
+resource "digitalocean_record" "rancher" {
   domain = data.digitalocean_domain.zone.name
   type   = "CNAME"
   name   = "rancher"
   value  = "${aws_elb.rancher-server-lb.dns_name}."
+  ttl    = 60
+}
+
+resource "digitalocean_record" "keycloak" {
+  domain = data.digitalocean_domain.zone.name
+  type   = "CNAME"
+  name   = "keycloak"
+  value  = "${aws_elb.rancher-server-lb.dns_name}."
+  ttl    = 60
+}
+
+resource "aws_elb" "kubernetes-lb" {
+  name            = "${var.prefix}-kubernetes-lb"
+  subnets         = [aws_subnet.eu-central-1a-public.id]
+  security_groups = [aws_security_group.rancher.id]
+
+  listener {
+    instance_port     = 6443
+    instance_protocol = "tcp"
+    lb_port           = 6443
+    lb_protocol       = "tcp"
+  }
+
+  listener {
+    instance_port     = 9345
+    instance_protocol = "tcp"
+    lb_port           = 9345
+    lb_protocol       = "tcp"
+  }
+
+  health_check {
+    healthy_threshold   = 2
+    unhealthy_threshold = 2
+    timeout             = 3
+    target              = "TCP:9345"
+    interval            = 30
+  }
+
+  instances = [
+    aws_instance.vmlb[0].id,
+    aws_instance.vmlb[1].id,
+    aws_instance.vmlb[2].id
+  ]
+  cross_zone_load_balancing   = true
+  idle_timeout                = 400
+  connection_draining         = true
+  connection_draining_timeout = 400
+
+  tags = {
+    Name = "${var.prefix}-reg-lb"
+  }
+}
+
+resource "digitalocean_record" "kubernetes" {
+  domain = data.digitalocean_domain.zone.name
+  type   = "CNAME"
+  name   = "kubernetes"
+  value  = "${aws_elb.kubernetes-lb.dns_name}."
   ttl    = 60
 }

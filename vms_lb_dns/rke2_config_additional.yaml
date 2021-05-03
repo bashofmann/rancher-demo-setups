@@ -1,0 +1,4 @@
+server: https://kubernetes.plgrnd.be:9345
+token: my-shared-secret
+tls-san:
+  - kubernetes.plgrnd.be

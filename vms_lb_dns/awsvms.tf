@@ -106,14 +106,26 @@ resource "aws_security_group" "rancher" {
 }
 
 resource "aws_instance" "vmlb" {
-  count         = 5
-  ami           = data.aws_ami.ubuntu.id
+  count         = 3
+  ami           = data.aws_ami.sles.id
   instance_type = var.instance_type
 
   key_name                    = aws_key_pair.quickstart_key_pair.key_name
   vpc_security_group_ids      = [aws_security_group.rancher.id]
   subnet_id                   = aws_subnet.eu-central-1a-public.id
   associate_public_ip_address = true
+
+  provisioner "remote-exec" {
+    inline = [
+      "echo hello"
+    ]
+    connection {
+      type        = "ssh"
+      host        = self.public_ip
+      user        = "ec2-user"
+      private_key = file(var.ssh_key_file_name)
+    }
+  }
 
   root_block_device {
     volume_size = 80
