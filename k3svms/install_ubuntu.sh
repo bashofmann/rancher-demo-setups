@@ -45,6 +45,6 @@ kubectl rollout status deployment -n cert-manager cert-manager-webhook
 helm upgrade --install rancher rancher-latest/rancher \
   --namespace cattle-system \
   --version 2.5.7 \
-  --set hostname=rancher.${IP0}.xip.io --create-namespace
+  --set hostname=rancher.${IP0}.nip.io --create-namespace
 
 watch kubectl get pods,ingress -A
