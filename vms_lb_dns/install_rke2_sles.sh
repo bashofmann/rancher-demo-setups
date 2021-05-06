@@ -27,10 +27,10 @@ ssh -o StrictHostKeyChecking=no ec2-user@$IP2 sudo bash install_rke2.sh
 
 ssh -o StrictHostKeyChecking=no ec2-user@$IP0 sudo systemctl enable rke2-server.service
 ssh -o StrictHostKeyChecking=no ec2-user@$IP0 sudo systemctl start rke2-server.service
-
+sleep 120
 ssh -o StrictHostKeyChecking=no ec2-user@$IP1 sudo systemctl enable rke2-server.service
 ssh -o StrictHostKeyChecking=no ec2-user@$IP1 sudo systemctl start rke2-server.service
-
+sleep 120
 ssh -o StrictHostKeyChecking=no ec2-user@$IP2 sudo systemctl enable rke2-server.service
 ssh -o StrictHostKeyChecking=no ec2-user@$IP2 sudo systemctl start rke2-server.service
 
