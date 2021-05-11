@@ -1,5 +1,5 @@
-# curl https://releases.rancher.com/install-docker/19.03.sh | sh
-# sudo usermod -aG docker centos
+# curl https://releases.rancher.com/install-docker/20.10.sh | sh
+# sudo usermod -aG docker fcbit
 
 nodes:
   - address: ${IP0}
@@ -20,6 +20,8 @@ nodes:
       - controlplane
       - etcd
       - worker
+
+kubernetes_version: v1.19.10-rancher1-1
 
 network:
   plugin: calico
