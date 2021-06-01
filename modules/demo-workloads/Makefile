@@ -105,17 +105,13 @@ install-trow:
 install-harbor-standalone:
 	mkdir -p exported-charts
 	kubectl create namespace harbor || true
-	#helm chart pull registry.suse.com/harbor/harbor:1.5
-	#helm chart export registry.suse.com/harbor/harbor:1.5 -d ./exported-charts
-	helm upgrade --install harbor ./exported-charts/harbor --namespace harbor -f harbor-standalone/harbor-values.yaml
+	helm upgrade --install harbor harbor/harbor --namespace harbor -f harbor-standalone/harbor-values.yaml
 	kubectl apply -f harbor-standalone/certificate.yaml
 
 install-harbor:
 	mkdir -p exported-charts
 	kubectl create namespace harbor || true
-	helm chart pull registry.suse.com/harbor/harbor:1.5
-	helm chart export registry.suse.com/harbor/harbor:1.5 -d ./exported-charts
-	helm upgrade --install harbor ./exported-charts/harbor --namespace harbor -f harbor/harbor-values.yaml
+	helm upgrade --install harbor harbor/harbor --namespace harbor -f harbor/harbor-values.yaml
 	kubectl apply -f harbor/certificate.yaml
 
 troubleshoot-network:
