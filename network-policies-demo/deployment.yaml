@@ -12,21 +12,21 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app: nginx
-  name: nginx
+    app: httpbin
+  name: httpbin
   namespace: web-application
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: nginx
+      app: httpbin
   template:
     metadata:
       labels:
-        app: nginx
+        app: httpbin
     spec:
       containers:
-      - name: nginx
+      - name: httpbin
         image: kennethreitz/httpbin
         ports:
         - containerPort: 80
@@ -38,14 +38,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx
+  name: httpbin
   namespace: web-application
 spec:
   selector:
-    app: nginx
-  type: NodePort
+    app: httpbin
+  type: ClusterIP
   ports:
     - protocol: TCP
-      port: 80
+      port: 90
       targetPort: 80
-      nodePort: 30003

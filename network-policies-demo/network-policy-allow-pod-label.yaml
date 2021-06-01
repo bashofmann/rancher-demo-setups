@@ -6,17 +6,15 @@ metadata:
 spec:
   podSelector:
     matchLabels:
-      app: nginx
+      app: httpbin
   policyTypes:
     - Ingress
     - Egress
   ingress:
     - from:
-        - ipBlock:
-            cidr: 10.42.0.0/16
-        - namespaceSelector:
+        - podSelector:
             matchLabels:
-              access: allowed
+              app: curl
       ports:
         - protocol: TCP
           port: 80
