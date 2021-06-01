@@ -1,0 +1,17 @@
+apiVersion: v1
+stringData:
+  cloud-config: |
+    {
+        "cloud":"AzurePublicCloud",
+        "tenantId": "",
+        "subscriptionId": "",
+        "aadClientId": "",
+        "aadClientSecret": "",
+        "resourceGroup": "bhofmann-demo-rancher",
+        "location": "eastus"
+    }
+kind: Secret
+metadata:
+  name: azure-cloud-provider
+  namespace: kube-system
+type: Opaque
