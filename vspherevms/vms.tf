@@ -56,7 +56,7 @@ resource "vsphere_virtual_machine" "k3s-nodes" {
       hostname    = "${var.prefix}-k3s-${count.index}"
       public-keys = trimspace(file("${var.ssh_key_file_name}.pub"))
       user-data = base64encode(templatefile("../userdata/server.sh", {
-        docker_version = "19.03"
+        docker_version = "20.10"
         username       = "ubuntu"
       }))
     }
