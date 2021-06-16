@@ -22,4 +22,6 @@ helm upgrade --install rancher rancher-latest/rancher \
   --set hostname=rancher.plgrnd.be --create-namespace \
   --set ingress.tls.source=letsEncrypt
 
+#  --set rancherImageTag=master-head \
+
 watch kubectl get pods,ingress -A

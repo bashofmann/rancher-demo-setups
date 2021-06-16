@@ -103,16 +103,19 @@ install-trow:
 	helm upgrade --install -f trow/values.yaml trow trow/trow --namespace trow
 
 install-harbor-standalone:
-	mkdir -p exported-charts
-	kubectl create namespace harbor || true
-	helm upgrade --install harbor harbor/harbor --namespace harbor -f harbor-standalone/harbor-values.yaml
+	helm upgrade --install harbor harbor/harbor --namespace harbor -f harbor-standalone/harbor-values.yaml --create-namespace
 	kubectl apply -f harbor-standalone/certificate.yaml
 
 install-harbor:
-	mkdir -p exported-charts
-	kubectl create namespace harbor || true
-	helm upgrade --install harbor harbor/harbor --namespace harbor -f harbor/harbor-values.yaml
+	helm upgrade --install harbor harbor/harbor --namespace harbor -f harbor/harbor-values.yaml --create-namespace
 	kubectl apply -f harbor/certificate.yaml
+
+install-gitlab:
+	helm repo add gitlab https://charts.gitlab.io/
+	helm repo update
+	helm upgrade --install gitlab gitlab/gitlab \
+	  --namespace gitlab --create-namespace \
+	  --timeout 600s -f gitlab/values.yaml
 
 troubleshoot-network:
 	kubectl apply -f network-debugging

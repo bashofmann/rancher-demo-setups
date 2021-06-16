@@ -1,0 +1,16 @@
+global:
+  hosts:
+    domain: gitlab.plgrnd.be
+    externalIP: 167.172.188.121
+
+certmanager-issuer:
+  email: mail@bastianhofmann.de
+
+nginx-ingress:
+  controller:
+    kind: DaemonSet
+    hostPort:
+      enabled: true
+    service:
+      type: ClusterIP
+      externalTrafficPolicy: ""
