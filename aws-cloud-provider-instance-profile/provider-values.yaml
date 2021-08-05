@@ -1,0 +1,5 @@
+nodeSelector:
+  node-role.kubernetes.io/master: "true"
+
+image:
+  tag: v20210510-v1.21.0-alpha.0  
