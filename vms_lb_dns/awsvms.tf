@@ -19,7 +19,7 @@ resource "aws_subnet" "eu-central-1a-public" {
   vpc_id = aws_vpc.default.id
 
   cidr_block        = "10.0.0.0/24"
-  availability_zone = "eu-central-1a"
+  availability_zone = "eu-central-1b"
 
   tags = {
     Name = "bhofmann Public Subnet"
