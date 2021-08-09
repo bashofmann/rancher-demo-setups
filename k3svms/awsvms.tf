@@ -23,8 +23,8 @@ resource "aws_security_group" "rancher_sg_allowall" {
 }
 
 resource "aws_instance" "k3s" {
-  count         = 5
-  ami           = data.aws_ami.sles.id
+  count         = var.vm_count
+  ami           = data.aws_ami.ubuntu.id
   instance_type = var.instance_type
 
   key_name        = aws_key_pair.quickstart_key_pair.key_name
@@ -36,13 +36,13 @@ resource "aws_instance" "k3s" {
 
   provisioner "remote-exec" {
     inline = [
-      "cloud-init status --wait"
+      "sudo cloud-init status --wait"
     ]
 
     connection {
       type        = "ssh"
       host        = self.public_ip
-      user        = "ec2-user"
+      user        = "ubuntu"
       private_key = file(var.ssh_key_file_name)
     }
   }

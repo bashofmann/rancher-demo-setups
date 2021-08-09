@@ -34,6 +34,10 @@ variable "ssh_key_file_name" {
   default     = "~/.ssh/id_rsa"
 }
 
+variable "vm_count" {
+  type    = number
+  default = 4
+}
 
 # Local variables used to reduce repetition
 locals {

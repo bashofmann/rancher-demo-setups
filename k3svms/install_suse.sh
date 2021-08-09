@@ -30,21 +30,21 @@ k3sup join \
   --k3s-channel latest
 
 mv kubeconfig kubeconfig_rancher
-
-export KUBECONFIG=kubeconfig_rancher
-
-helm upgrade --install \
-  cert-manager jetstack/cert-manager \
-  --namespace cert-manager \
-  --set installCRDs=true \
-  --version v1.2.0 --create-namespace
-
-kubectl rollout status deployment -n cert-manager cert-manager
-kubectl rollout status deployment -n cert-manager cert-manager-webhook
-
-helm upgrade --install rancher rancher-latest/rancher \
-  --namespace cattle-system \
-  --version 2.5.8 \
-  --set hostname=rancher.${IP0}.nip.io --create-namespace
-
-watch kubectl get pods,ingress -A
+#
+#export KUBECONFIG=kubeconfig_rancher
+#
+#helm upgrade --install \
+#  cert-manager jetstack/cert-manager \
+#  --namespace cert-manager \
+#  --set installCRDs=true \
+#  --version v1.2.0 --create-namespace
+#
+#kubectl rollout status deployment -n cert-manager cert-manager
+#kubectl rollout status deployment -n cert-manager cert-manager-webhook
+#
+#helm upgrade --install rancher rancher-latest/rancher \
+#  --namespace cattle-system \
+#  --version 2.5.8 \
+#  --set hostname=rancher.${IP0}.nip.io --create-namespace
+#
+#watch kubectl get pods,ingress -A
