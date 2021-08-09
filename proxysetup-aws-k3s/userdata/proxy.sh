@@ -65,8 +65,6 @@ stream {
     upstream rancher_servers_http {
         least_conn;
         server 10.0.1.200:80 max_fails=3 fail_timeout=5s;
-        server 10.0.1.201:80 max_fails=3 fail_timeout=5s;
-        server 10.0.1.202:80 max_fails=3 fail_timeout=5s;
     }
     server {
         listen 80;
@@ -76,8 +74,6 @@ stream {
     upstream rancher_servers_https {
         least_conn;
         server 10.0.1.200:443 max_fails=3 fail_timeout=5s;
-        server 10.0.1.201:443 max_fails=3 fail_timeout=5s;
-        server 10.0.1.202:443 max_fails=3 fail_timeout=5s;
     }
     server {
         listen     443;

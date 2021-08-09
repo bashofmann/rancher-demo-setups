@@ -84,7 +84,7 @@ resource "aws_instance" "cluster_vms" {
   count = 1
   ami   = data.aws_ami.ubuntu.id
 
-  instance_type = "t3a.medium"
+  instance_type = "t3a.xlarge"
 
   key_name                    = aws_key_pair.ssh_key_pair.key_name
   vpc_security_group_ids      = [aws_security_group.cluster_vms.id]
@@ -115,6 +115,45 @@ resource "aws_instance" "cluster_vms" {
 
   tags = {
     Name        = "bhofmann-cluster-vm-${count.index}"
+    Creator     = "bhofmann"
+    Owner       = "bhofmann"
+    DoNotDelete = "true"
+  }
+}
+
+
+
+resource "aws_instance" "additional_vms" {
+  count = 3
+  ami   = data.aws_ami.ubuntu.id
+
+  instance_type = "t3a.medium"
+
+  key_name                    = aws_key_pair.ssh_key_pair.key_name
+  vpc_security_group_ids      = [aws_security_group.cluster_vms.id]
+  subnet_id                   = aws_subnet.eu-central-1a-private.id
+  associate_public_ip_address = true
+  source_dest_check           = false
+  private_ip                  = "10.0.1.${count.index + 230}"
+
+  provisioner "remote-exec" {
+    inline = [
+      "cloud-init status --wait"
+    ]
+
+    connection {
+      type                = "ssh"
+      host                = self.private_ip
+      user                = "ubuntu"
+      private_key         = file(var.ssh_key_file_name)
+      bastion_host        = aws_instance.proxy.public_ip
+      bastion_user        = "ubuntu"
+      bastion_private_key = file(var.ssh_key_file_name)
+    }
+  }
+
+  tags = {
+    Name        = "bhofmann-cluster-cvm-${count.index}"
     Creator     = "bhofmann"
     Owner       = "bhofmann"
     DoNotDelete = "true"

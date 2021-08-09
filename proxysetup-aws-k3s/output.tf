@@ -10,3 +10,6 @@ output "cluster_vm_ips" {
 output "dns_name" {
   value = local.rancher_hostname
 }
+output "add_vm_ips" {
+  value = [aws_instance.additional_vms.*.private_ip]
+}
