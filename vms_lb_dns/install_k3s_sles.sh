@@ -12,7 +12,7 @@ k3sup install \
   --user ec2-user \
   --cluster \
   --k3s-extra-args "--node-external-ip ${IP0}" \
-  --k3s-channel latest
+  --k3s-channel v1.21
 
 k3sup join \
   --ip $IP1 \
@@ -21,7 +21,7 @@ k3sup join \
   --server-ip $IP0 \
   --server \
   --k3s-extra-args "--node-external-ip ${IP1}" \
-  --k3s-channel latest
+  --k3s-channel v1.21
 
 k3sup join \
   --ip $IP2 \
@@ -30,4 +30,4 @@ k3sup join \
   --server-ip $IP0 \
   --server \
   --k3s-extra-args "--node-external-ip ${IP2}" \
-  --k3s-channel latest
+  --k3s-channel v1.21

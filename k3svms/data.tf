@@ -58,3 +58,18 @@ data "aws_ami" "sles" {
     values = ["ebs"]
   }
 }
+
+data "aws_ami" "rhel" {
+  most_recent = true
+  owners      = ["309956199498"] # RedHat
+
+  filter {
+    name   = "name"
+    values = ["RHEL-7.9_HVM-*-x86_64-0-Hourly2-GP2"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+}

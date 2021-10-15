@@ -93,6 +93,10 @@ resource "aws_instance" "cluster_vms" {
   source_dest_check           = false
   private_ip                  = "10.0.1.${count.index + 200}"
 
+  root_block_device {
+    volume_size = 80
+  }
+
   user_data = templatefile("userdata/cluster_vms.sh", {
     proxy_private_ip = aws_instance.proxy.private_ip
   })
