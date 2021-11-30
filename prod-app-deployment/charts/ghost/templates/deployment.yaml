@@ -27,6 +27,26 @@ spec:
       serviceAccountName: {{ include "ghost.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+      {{- if .Values.mysqlcluster.enabled }}
+      - name: wait-for-db
+        image: bitnami/mysql:latest
+        command:
+        - /bin/bash
+        env:
+          - name: DB_HOST
+            value: {{ include "ghost.fullname" . }}-db-mysql-master
+        envFrom:
+          - secretRef:
+              name: {{ include "ghost.fullname" . }}-db
+        args:
+        - -c
+        - >
+          set -x;
+          while ! mysqlshow -u $USER -p $PASSWORD -h $DB_HOST $DATABASE; do
+            sleep 15;
+          done
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
