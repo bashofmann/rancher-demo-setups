@@ -43,7 +43,7 @@ spec:
         - -c
         - >
           set -x;
-          while ! mysqlshow -u $USER -p $PASSWORD -h $DB_HOST $DATABASE; do
+          while ! mysqlshow -u $USER --password=$PASSWORD -h $DB_HOST $DATABASE; do
             sleep 15;
           done
       {{- end }}
