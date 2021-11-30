@@ -44,6 +44,24 @@ spec:
             - name: http
               containerPort: 2368
               protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              {{- if .Values.ingress.tls }}
+              httpHeaders:
+                - name: X-Forwarded-Proto
+                  value: https
+              {{- end }}
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              {{- if .Values.ingress.tls }}
+              httpHeaders:
+                - name: X-Forwarded-Proto
+                  value: https
+              {{- end }}
+              port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
