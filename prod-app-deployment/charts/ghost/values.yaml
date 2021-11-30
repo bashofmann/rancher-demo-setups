@@ -80,3 +80,8 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+storage:
+  enabled: false
+  size: 2Gi
+  storageClassName: longhorn

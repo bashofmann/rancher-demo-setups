@@ -4,6 +4,19 @@ helm:
   chart: github.com/bashofmann/rancher-demo-setups/prod-app-deployment/charts/ghost
   releaseName: ghost
   values:
+    autoscaling:
+      enabled: true
+      minReplicas: 2
+      maxReplicas: 5
+    resources:
+      limits:
+        cpu: 100m
+        memory: 128Mi
+      requests:
+        cpu: 100m
+        memory: 128Mi
+    storage:
+      enabled: true
     ingress:
       enabled: true
       annotations:
