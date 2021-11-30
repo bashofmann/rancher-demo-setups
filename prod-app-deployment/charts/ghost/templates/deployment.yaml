@@ -43,7 +43,7 @@ spec:
             - name: database__client
               value: mysql
             - name: database__connection__host
-              value: {{ include "ghost.fullname" . }}-db
+              value: {{ include "ghost.fullname" . }}-db-mysql-master
             - name: database__connection__user
               valueFrom:
                 secretKeyRef:
