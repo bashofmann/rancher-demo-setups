@@ -16,9 +16,9 @@ helm:
         cpu: 100m
         memory: 256Mi
     storage:
-      enabled: true
+      enabled: false
     mysqlcluster:
-      enabled: true
+      enabled: false
       password: abcdefghi
       rootPassword: abcdefghi
     ingress:

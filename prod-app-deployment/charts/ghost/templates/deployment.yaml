@@ -24,7 +24,6 @@ spec:
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "ghost.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       initContainers:
@@ -85,6 +84,11 @@ spec:
             - name: http
               containerPort: 2368
               protocol: TCP
+          {{- if .Values.storage.enabled }}
+          volumeMounts:
+            - name: {{ include "ghost.fullname" . }}
+              mountPath: /var/lib/ghost/content
+          {{- end }}
           livenessProbe:
             timeoutSeconds: 3
             periodSeconds: 10
@@ -120,4 +124,10 @@ spec:
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.storage.enabled }}
+      volumes:
+        - name: {{ include "ghost.fullname" . }}
+          persistentVolumeClaim:
+            claimName: {{ include "ghost.fullname" . }}
       {{- end }}
