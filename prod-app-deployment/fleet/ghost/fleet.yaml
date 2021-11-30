@@ -1,0 +1,6 @@
+defaultNamespace: ghost
+
+helm:
+  chart: ../../charts/ghost
+  releaseName: ghost
+  values:
