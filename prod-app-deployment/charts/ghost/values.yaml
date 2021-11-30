@@ -85,3 +85,10 @@ storage:
   enabled: false
   size: 2Gi
   storageClassName: longhorn
+
+mysqlcluster:
+  enabled: false
+  db: ghost
+  user: ghost
+  password: ""
+  rootPassword: ""

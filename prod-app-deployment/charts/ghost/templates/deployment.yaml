@@ -39,6 +39,27 @@ spec:
             - name: url
               value: https://{{ .host }}
             {{- end }}
+            {{- if .Values.mysqlcluster.enabled }}
+            - name: database__client
+              value: mysql
+            - name: database__connection__host
+              value: {{ include "ghost.fullname" . }}-db
+            - name: database__connection__user
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ghost.fullname" . }}-db
+                  key: USER
+            - name: database__connection__password
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ghost.fullname" . }}-db
+                  key: PASSWORD
+            - name: database__connection__database
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "ghost.fullname" . }}-db
+                  key: DATABASE
+            {{- end }}
           {{- end }}
           ports:
             - name: http

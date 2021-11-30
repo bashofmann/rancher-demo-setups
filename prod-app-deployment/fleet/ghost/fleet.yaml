@@ -17,6 +17,10 @@ helm:
         memory: 256Mi
     storage:
       enabled: true
+    mysqlcluster:
+      enabled: true
+      password: abcdefghi
+      rootPassword: abcdefghi
     ingress:
       enabled: true
       annotations:

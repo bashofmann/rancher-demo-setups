@@ -1,0 +1,45 @@
+{{- if .Values.mysqlcluster.enabled }}
+apiVersion: v1
+kind: Secret
+metadata:
+  name: {{ include "ghost.fullname" . }}-db
+  labels:
+    {{- include "ghost.labels" . | nindent 4 }}
+type: Opaque
+data:
+  ROOT_PASSWORD: {{ .Values.mysqlcluster.rootPassword | b64enc }}
+  DATABASE: {{ .Values.mysqlcluster.db | b64enc }}
+  USER: {{ .Values.mysqlcluster.user | b64enc }}
+  PASSWORD: {{ .Values.mysqlcluster.password | b64enc }}
+---
+apiVersion: mysql.presslabs.org/v1alpha1
+kind: MysqlCluster
+metadata:
+  name: {{ include "ghost.fullname" . }}-db
+  labels:
+    {{- include "ghost.labels" . | nindent 4 }}
+spec:
+  replicas: 2
+  secretName: {{ include "ghost.fullname" . }}-db
+  mysqlVersion: "5.7"
+  minAvailable: "50%"
+
+  mysqlConf:
+    max_connections: "200"
+    innodb-buffer-pool-size: "256M"
+    tmp_table_size: 256M
+    max_heap_table_size: 256M
+
+  podSpec:
+    resources:
+      requests:
+        memory: 256Mi
+        cpu:    200m
+
+  volumeSpec:
+    persistentVolumeClaim:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 2Gi
+{{- end }}

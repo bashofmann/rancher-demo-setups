@@ -1,0 +1,12 @@
+apiVersion: ui.cattle.io/v1
+kind: NavLink
+metadata:
+  name: mysql-operator
+spec:
+  label: MYSQL Operator
+  toService:
+    name: mysql-operator
+    namespace: mysql-operator
+    path: /
+    port: "80"
+    scheme: http
