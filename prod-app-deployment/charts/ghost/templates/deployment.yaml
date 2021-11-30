@@ -35,8 +35,10 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
           {{- if .Values.ingress.enabled }}
+            {{- range .Values.ingress.hosts }}
             - name: url
-              value: {{ .Values.ingress.hosts.0.host }}
+              value: {{ .host }}
+            {{- end }}
           {{- end }}
           ports:
             - name: http
