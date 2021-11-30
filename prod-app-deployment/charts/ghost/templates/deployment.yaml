@@ -86,6 +86,7 @@ spec:
               containerPort: 2368
               protocol: TCP
           livenessProbe:
+            timeoutSeconds: 3
             periodSeconds: 10
             failureThreshold: 20
             httpGet:
@@ -97,6 +98,7 @@ spec:
               {{- end }}
               port: http
           readinessProbe:
+            timeoutSeconds: 3
             httpGet:
               path: /
               {{- if .Values.ingress.tls }}
