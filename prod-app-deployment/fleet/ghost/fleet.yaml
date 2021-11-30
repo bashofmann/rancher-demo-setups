@@ -5,7 +5,7 @@ helm:
   releaseName: ghost
   values:
     autoscaling:
-      enabled: true
+      enabled: false
       minReplicas: 2
       maxReplicas: 5
     resources:
@@ -16,7 +16,7 @@ helm:
         cpu: 100m
         memory: 256Mi
     storage:
-      enabled: false
+      enabled: true
     mysqlcluster:
       enabled: true
       password: abcdefghi
