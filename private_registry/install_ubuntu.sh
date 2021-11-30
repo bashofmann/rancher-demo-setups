@@ -38,6 +38,14 @@ export harbor_pw=$(kubectl get secret -n harbor harbor-harbor-core -o jsonpath="
 
 export KUBECONFIG=$(pwd)/kubeconfig_rancher
 
+helm upgrade --install \
+  ingress-nginx ingress-nginx/ingress-nginx \
+  --namespace ingress-nginx \
+  --set controller.kind=DaemonSet \
+  --set controller.hostPort.enabled=true \
+  --set controller.service.type=ClusterIP \
+  --create-namespace
+
 #kubectl create namespace ingress-nginx | true
 #kubectl -n ingress-nginx create service externalname external --external-name ${LB} || true
 #
