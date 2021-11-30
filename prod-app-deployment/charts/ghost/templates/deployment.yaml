@@ -30,7 +30,7 @@ spec:
       initContainers:
       {{- if .Values.mysqlcluster.enabled }}
       - name: wait-for-db
-        image: bitnami/mysql:latest
+        image: mysql:latest
         command:
         - /bin/bash
         env:
