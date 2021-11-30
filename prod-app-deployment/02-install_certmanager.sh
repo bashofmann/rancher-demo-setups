@@ -14,3 +14,5 @@ helm upgrade --install \
 
 kubectl rollout status deployment -n cert-manager cert-manager
 kubectl rollout status deployment -n cert-manager cert-manager-webhook
+
+kubectl apply -f cert-manager/cluster-issuer.yaml
