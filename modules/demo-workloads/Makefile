@@ -40,7 +40,7 @@ install-sealed-secrets:
 
 install-cert-manager:
 	kubectl create namespace istio-system || true
-	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.2.0 --set installCRDs=true --wait --create-namespace
+	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.5.3 --set installCRDs=true --wait --create-namespace
 	cat cert-manager/clusterissuer.yaml | envsubst | kubectl apply -f -
 	cat cert-manager/credentials-secret.yaml | envsubst | kubectl apply -f -
 
@@ -94,8 +94,8 @@ install-keycloak:
 install-elk:
 	kubectl create namespace logging || true
 	kubectl apply -f elk/basic-auth.yaml
-	helm upgrade --install elasticsearch elastic/elasticsearch --version 7.8.1 --namespace logging -f elk/elasticsearch/values.yaml
-	helm upgrade --install kibana elastic/kibana --version 7.8.1 --namespace logging -f elk/kibana/values.yaml
+	helm upgrade --install elasticsearch elastic/elasticsearch --version 7.15.0 --namespace logging -f elk/elasticsearch/values.yaml
+	helm upgrade --install kibana elastic/kibana --version 7.15.0 --namespace logging -f elk/kibana/values.yaml
 
 install-trow:
 	kubectl create namespace trow || true
