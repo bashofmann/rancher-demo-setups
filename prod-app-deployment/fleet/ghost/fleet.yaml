@@ -7,7 +7,7 @@ helm:
     ingress:
       enabled: true
       annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-prod
+        cert-manager.io/cluster-issuer: letsencrypt-http-prod
       hosts:
         - host: ghost.k8sdemo.plgrnd.be
           paths:
