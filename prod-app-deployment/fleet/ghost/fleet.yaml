@@ -4,33 +4,4 @@ helm:
   chart: github.com/bashofmann/rancher-demo-setups/prod-app-deployment/charts/ghost
   releaseName: ghost
   values:
-    autoscaling:
-      enabled: false
-      minReplicas: 2
-      maxReplicas: 5
-    resources:
-      limits:
-        cpu: 100m
-        memory: 256Mi
-      requests:
-        cpu: 100m
-        memory: 256Mi
-    storage:
-      enabled: false
-    mysqlcluster:
-      enabled: false
-      password: abcdefghi
-      rootPassword: abcdefghi
-    ingress:
-      enabled: true
-      annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-http-prod
-      hosts:
-        - host: ghost.k8sdemo.plgrnd.be
-          paths:
-            - path: /
-              pathType: ImplementationSpecific
-      tls:
-        - secretName: ghost-tls
-          hosts:
-            - ghost.k8sdemo.plgrnd.be
+
