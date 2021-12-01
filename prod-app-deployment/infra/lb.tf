@@ -28,7 +28,9 @@ resource "aws_elb" "k8sdemo-lb" {
   instances = [
     aws_instance.k8sdemo-vm[0].id,
     aws_instance.k8sdemo-vm[1].id,
-    aws_instance.k8sdemo-vm[2].id
+    aws_instance.k8sdemo-vm[2].id,
+    aws_instance.k8sdemo-vm[3].id,
+    aws_instance.k8sdemo-vm[4].id,
   ]
   cross_zone_load_balancing   = true
   idle_timeout                = 400
