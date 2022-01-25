@@ -22,5 +22,6 @@ helm upgrade --install rancher rancher-latest/rancher \
   --set hostname=rancher.plgrnd.be --create-namespace \
   --set ingress.tls.source=letsEncrypt
 
+kubectl apply -f clusterissuer.yaml
 
 watch "kubectl get secret --namespace cattle-system bootstrap-secret -o go-template='{{.data.bootstrapPassword|base64decode}}' && kubectl get pods,ingress,certificates -A"
