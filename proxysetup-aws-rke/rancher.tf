@@ -14,7 +14,7 @@ resource "null_resource" "rancher" {
       "kubectl --kubeconfig kube_config_rke-cluster.yaml rollout status deployment -n cert-manager cert-manager",
       "kubectl --kubeconfig kube_config_rke-cluster.yaml rollout status deployment -n cert-manager cert-manager-webhook",
       "sleep 60", // hack: wait until webhook certificate was created
-      "helm --kubeconfig kube_config_rke-cluster.yaml upgrade --install rancher rancher-latest/rancher --namespace cattle-system --set hostname=${local.rancher_hostname} --set proxy=http://${aws_instance.proxy.private_ip}:8888  --set noProxy=127.0.0.0/8\\\\,10.0.0.0/8\\\\,172.16.0.0/12\\\\,192.168.0.0/16\\\\,.svc\\\\,.cluster.local",
+      "helm --kubeconfig kube_config_rke-cluster.yaml upgrade --install rancher rancher-latest/rancher --version v2.6.3-rc4 --namespace cattle-system --set hostname=${local.rancher_hostname} --set proxy=http://${aws_instance.proxy.private_ip}:8888  --set noProxy=127.0.0.0/8\\\\,10.0.0.0/8\\\\,172.16.0.0/12\\\\,192.168.0.0/16\\\\,.svc\\\\,.cluster.local",
       "kubectl --kubeconfig kube_config_rke-cluster.yaml rollout status deployment -n cattle-system rancher",
     ]
 
