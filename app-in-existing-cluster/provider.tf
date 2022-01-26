@@ -2,10 +2,10 @@ terraform {
   required_providers {
     rancher2 = {
       source  = "rancher/rancher2"
-      version = "1.13.0-bh"
+      version = "1.17.1"
     }
   }
-  required_version = ">= 0.13"
+  required_version = ">= 1.0.0"
 }
 provider "rancher2" {
   api_url    = var.rancher_url
