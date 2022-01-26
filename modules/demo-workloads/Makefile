@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-install: add-helm-repos install-rancher-addons install-sealed-secrets install-cert-manager install-external-dns install-harbor install-demo-shop install-rancher-demo install-mysql-operator install-loki
+install: add-helm-repos install-rancher-addons install-sealed-secrets install-cert-manager install-external-dns install-harbor install-demo-shop install-rancher-demo install-mysql-operator install-loki install-neuvector
 
 add-helm-repos:
 	helm repo add jetstack https://charts.jetstack.io
@@ -18,6 +18,7 @@ add-helm-repos:
 	helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 	helm repo add trow https://trow.io
 	helm repo add rancher-charts https://charts.rancher.io
+	helm repo add neuvector https://neuvector.github.io/neuvector-helm/
 	helm repo update
 
 install-rancher-addons:
@@ -116,6 +117,16 @@ install-gitlab:
 	helm upgrade --install gitlab gitlab/gitlab \
 	  --namespace gitlab --create-namespace \
 	  --timeout 600s -f gitlab/values.yaml
+
+install-neuvector:
+	kubectl create namespace neuvector || true
+	kubectl apply -f neuvector/regcred.yaml
+	helm upgrade --install neuvector --namespace neuvector neuvector/core --create-namespace -f neuvector/values.yaml -f neuvector/license.yaml --version 1.8.9
+	kubectl -n neuvector rollout status deployment neuvector-controller-pod
+	kubectl -n neuvector rollout status deployment neuvector-manager-pod
+	kubectl -n neuvector rollout status deployment neuvector-scanner-pod
+	kubectl -n neuvector rollout status daemonset neuvector-enforcer-pod
+	bash neuvector/configure.sh
 
 troubleshoot-network:
 	kubectl apply -f network-debugging

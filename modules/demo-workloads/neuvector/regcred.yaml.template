@@ -1,0 +1,8 @@
+apiVersion: v1
+type: kubernetes.io/dockerconfigjson
+kind: Secret
+metadata:
+  name: regsecret
+  namespace: neuvector
+data:
+  .dockerconfigjson: xxxx

@@ -1,0 +1,25 @@
+tag: 4.4.3
+imagePullSecrets: regsecret
+
+controller:
+  replicas: 1
+  apisvc:
+    type: ClusterIP
+  secret:
+    enabled: true
+cve:
+  scanner:
+    replicas: 1
+manager:
+  env:
+    ssl: false
+  ingress:
+    enabled: true
+    host: neuvector.k8s-demo.plgrnd.be
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    tls: true
+    secretName: neuvector-tls-secret
+
+k3s:
+  enabled: true

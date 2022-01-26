@@ -1,0 +1,10 @@
+controller:
+  secret:
+    data:
+      eulainitcfg.yaml:
+        license_key: xxxx
+      userinitcfg.yaml:
+        users:
+        - Fullname: admin
+          Password: xxxx
+          Role: admin
