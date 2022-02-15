@@ -18,7 +18,7 @@ helm repo add rancher-latest https://releases.rancher.com/server-charts/latest
 
 helm upgrade --install rancher rancher-latest/rancher \
   --namespace cattle-system \
-  --version v2.6.2 \
+  --version v2.6.3 \
   --set hostname=rancher.plgrnd.be --create-namespace \
   --set ingress.tls.source=letsEncrypt
 
