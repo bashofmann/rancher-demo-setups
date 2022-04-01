@@ -35,14 +35,14 @@ helm install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --set installCRDs=true \
-  --version v1.2.0 --create-namespace
+  --version 1.7.1 --create-namespace
 
 kubectl rollout status deployment -n cert-manager cert-manager
 kubectl rollout status deployment -n cert-manager cert-manager-webhook
 
 helm install rancher rancher-latest/rancher \
   --namespace cattle-system \
-  --version 2.5.8 \
-  --set hostname=rancher.${IP0}.nip.io --create-namespace
+  --version 2.6.4 \
+  --set hostname=rancher.${IP0}.sslip.io --create-namespace
 
 watch kubectl get pods,ingress -A  

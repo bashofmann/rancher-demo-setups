@@ -41,7 +41,7 @@ install-sealed-secrets:
 
 install-cert-manager:
 	kubectl create namespace istio-system || true
-	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.5.3 --set installCRDs=true --wait --create-namespace
+	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.7.1 --set installCRDs=true --wait --create-namespace
 	cat cert-manager/clusterissuer.yaml | envsubst | kubectl apply -f -
 	cat cert-manager/credentials-secret.yaml | envsubst | kubectl apply -f -
 

@@ -64,7 +64,7 @@ helm upgrade --install \
   cert-manager jetstack/cert-manager \
   --namespace cert-manager \
   --set installCRDs=true \
-  --version v1.2.0 --create-namespace
+  --version 1.7.1 --create-namespace
 
 kubectl rollout status deployment -n cert-manager cert-manager
 kubectl rollout status deployment -n cert-manager cert-manager-webhook
@@ -79,7 +79,7 @@ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "harbor-
 
 helm upgrade --install rancher rancher-latest/rancher \
   --namespace cattle-system \
-  --version v2.5.8 \
+  --version v2.6.4 \
   --set hostname=rancher.plgrnd.be --create-namespace \
   --set ingress.tls.source=letsEncrypt \
   --set rancherImage=registry.plgrnd.be/rancher/rancher \

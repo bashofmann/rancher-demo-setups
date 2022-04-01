@@ -7,7 +7,7 @@ k3sup install \
   --user ubuntu \
   --cluster \
   --k3s-extra-args "--disable local-storage --node-external-ip ${IP0}" \
-  --k3s-channel v1.19
+  --k3s-channel v1.21
 
 k3sup join \
   --ip $IP1 \
@@ -16,7 +16,7 @@ k3sup join \
   --server-ip $IP0 \
   --server \
   --k3s-extra-args "--disable local-storage --node-external-ip ${IP1}" \
-  --k3s-channel v1.19
+  --k3s-channel v1.21
 
 k3sup join \
   --ip $IP2 \
@@ -25,7 +25,7 @@ k3sup join \
   --server-ip $IP0 \
   --server \
   --k3s-extra-args "--disable local-storage --node-external-ip ${IP2}" \
-  --k3s-channel v1.19
+  --k3s-channel v1.21
 
 k3sup join \
   --ip $IP3 \
@@ -34,7 +34,7 @@ k3sup join \
   --server-ip $IP0 \
   --server \
   --k3s-extra-args "--disable local-storage --node-external-ip ${IP3}" \
-  --k3s-channel v1.19
+  --k3s-channel v1.21
 
 k3sup join \
   --ip $IP4 \
@@ -43,4 +43,4 @@ k3sup join \
   --server-ip $IP0 \
   --server \
   --k3s-extra-args "--disable local-storage --node-external-ip ${IP4}" \
-  --k3s-channel v1.19
+  --k3s-channel v1.21

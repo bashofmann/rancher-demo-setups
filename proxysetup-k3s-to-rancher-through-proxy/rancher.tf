@@ -41,7 +41,7 @@ resource "aws_instance" "rancher_server" {
       "cloud-init status --wait > /dev/null",
       "echo 'Completed cloud-init!'",
       "helm repo add rancher-latest https://releases.rancher.com/server-charts/latest",
-      "helm --kubeconfig /etc/rancher/k3s/k3s.yaml upgrade --install rancher rancher-latest/rancher --namespace cattle-system --version 2.5.8 --set hostname=${join(".", ["rancher", self.public_ip, "nip.io"])} --create-namespace || true",
+      "helm --kubeconfig /etc/rancher/k3s/k3s.yaml upgrade --install rancher rancher-latest/rancher --namespace cattle-system --version 2.6.4 --set hostname=${join(".", ["rancher", self.public_ip, "nip.io"])} --create-namespace || true",
       "kubectl --kubeconfig /etc/rancher/k3s/k3s.yaml rollout status deployment -n cattle-system rancher"
     ]
 

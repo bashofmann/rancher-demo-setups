@@ -132,7 +132,9 @@ resource "aws_instance" "additional_vms" {
   ami   = data.aws_ami.ubuntu.id
 
   instance_type = "t3a.medium"
-
+  root_block_device {
+    volume_size = 80
+  }
   key_name                    = aws_key_pair.ssh_key_pair.key_name
   vpc_security_group_ids      = [aws_security_group.cluster_vms.id]
   subnet_id                   = aws_subnet.eu-central-1a-private.id
