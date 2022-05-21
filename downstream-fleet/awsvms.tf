@@ -132,29 +132,3 @@ resource "aws_instance" "cluster_three" {
     Name = "${var.prefix}-rancher-k3s-fleet-three"
   }
 }
-
-resource "aws_instance" "cluster_four" {
-  provider      = aws.aws_eu_west
-  ami           = data.aws_ami.sles_arm_west.id
-  instance_type = "a1.medium"
-
-  key_name        = aws_key_pair.ssh_key_pair_west.key_name
-  security_groups = [aws_security_group.sg_allowall_west.name]
-
-  provisioner "remote-exec" {
-    inline = [
-      "cloud-init status --wait"
-    ]
-
-    connection {
-      type        = "ssh"
-      host        = self.public_ip
-      user        = "ec2-user"
-      private_key = file(var.ssh_key_file_name)
-    }
-  }
-
-  tags = {
-    Name = "${var.prefix}-rancher-k3s-fleet-four"
-  }
-}

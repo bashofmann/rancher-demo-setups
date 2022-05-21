@@ -56,3 +56,34 @@ resource "null_resource" "registration_2" {
     }
   }
 }
+
+data "rancher2_principal" "rancher_standard" {
+  name = "RancherStandard"
+  type = "group"
+}
+
+data "rancher2_role_template" "cluster_owner" {
+  name = "Cluster Owner"
+  context = "cluster"
+}
+
+resource "rancher2_cluster_role_template_binding" "rancher_standard_0" {
+  name = "rancher-standard"
+  cluster_id = rancher2_cluster.fleet_0.id
+  role_template_id = data.rancher2_role_template.cluster_owner.id
+  group_principal_id = data.rancher2_principal.rancher_standard.id
+}
+
+resource "rancher2_cluster_role_template_binding" "rancher_standard_1" {
+  name = "rancher-standard"
+  cluster_id = rancher2_cluster.fleet_1.id
+  role_template_id = data.rancher2_role_template.cluster_owner.id
+  group_principal_id = data.rancher2_principal.rancher_standard.id
+}
+
+resource "rancher2_cluster_role_template_binding" "rancher_standard_2" {
+  name = "rancher-standard"
+  cluster_id = rancher2_cluster.fleet_2.id
+  role_template_id = data.rancher2_role_template.cluster_owner.id
+  group_principal_id = data.rancher2_principal.rancher_standard.id
+}

@@ -5,10 +5,10 @@ terraform {
     }
     rancher2 = {
       source  = "rancher/rancher2"
-      version = "1.10.6"
+      version = "1.23.0"
     }
   }
-  required_version = ">= 0.13"
+  required_version = ">= 1.0"
 }
 
 provider "aws" {
