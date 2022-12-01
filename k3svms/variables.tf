@@ -36,7 +36,7 @@ variable "ssh_key_file_name" {
 
 variable "vm_count" {
   type    = number
-  default = 4
+  default = 2
 }
 
 # Local variables used to reduce repetition
