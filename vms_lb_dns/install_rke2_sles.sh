@@ -21,9 +21,9 @@ dd if=rke2_config_additional.yaml | ssh -o StrictHostKeyChecking=no ec2-user@$IP
 ssh -o StrictHostKeyChecking=no ec2-user@$IP0 curl -sfL https://get.rke2.io --output install_rke2.sh
 ssh -o StrictHostKeyChecking=no ec2-user@$IP1 curl -sfL https://get.rke2.io --output install_rke2.sh
 ssh -o StrictHostKeyChecking=no ec2-user@$IP2 curl -sfL https://get.rke2.io --output install_rke2.sh
-ssh -o StrictHostKeyChecking=no ec2-user@$IP0 sudo bash install_rke2.sh
-ssh -o StrictHostKeyChecking=no ec2-user@$IP1 sudo bash install_rke2.sh
-ssh -o StrictHostKeyChecking=no ec2-user@$IP2 sudo bash install_rke2.sh
+ssh -o StrictHostKeyChecking=no ec2-user@$IP0 sudo INSTALL_RKE2_CHANNEL=v1.23 bash install_rke2.sh
+ssh -o StrictHostKeyChecking=no ec2-user@$IP1 sudo INSTALL_RKE2_CHANNEL=v1.23 bash install_rke2.sh
+ssh -o StrictHostKeyChecking=no ec2-user@$IP2 sudo INSTALL_RKE2_CHANNEL=v1.23 bash install_rke2.sh
 
 ssh -o StrictHostKeyChecking=no ec2-user@$IP0 sudo systemctl enable rke2-server.service
 ssh -o StrictHostKeyChecking=no ec2-user@$IP0 sudo systemctl start rke2-server.service
