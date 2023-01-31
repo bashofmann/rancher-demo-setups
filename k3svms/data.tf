@@ -19,13 +19,13 @@ data "aws_ami" "ubuntu" {
   }
 }
 
-data "aws_ami" "centos" {
-  owners      = ["125523088429"]
+data "aws_ami" "sles" {
+  owners      = ["013907871322"]
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["CentOS 7.9*"]
+    values = ["suse-sles-15-sp2*"]
   }
 
   filter {
@@ -39,13 +39,13 @@ data "aws_ami" "centos" {
   }
 }
 
-data "aws_ami" "sles" {
-  owners      = ["013907871322"]
+data "aws_ami" "opensuse" {
+  owners      = ["679593333241"]
   most_recent = true
 
   filter {
     name   = "name"
-    values = ["suse-sles-15-sp2*"]
+    values = ["openSUSE-Leap-15-3-*"]
   }
 
   filter {
