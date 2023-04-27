@@ -4,7 +4,7 @@ data "aws_ami" "sles" {
 
   filter {
     name   = "name"
-    values = ["suse-sles-15-sp2*"]
+    values = ["suse-sles-15-sp4*"]
   }
 
   filter {

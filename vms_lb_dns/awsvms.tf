@@ -67,6 +67,30 @@ resource "aws_security_group" "rancher" {
     cidr_blocks = ["0.0.0.0/0"]
   }
   ingress {
+    from_port   = 9090
+    to_port     = 9090
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 4000
+    to_port     = 4000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 32090
+    to_port     = 32090
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
+    from_port   = 32000
+    to_port     = 32000
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress {
     from_port   = 30001
     to_port     = 30001
     protocol    = "tcp"
@@ -128,7 +152,7 @@ resource "aws_instance" "vmlb" {
   }
 
   root_block_device {
-    volume_size = 80
+    volume_size = 160
   }
 
   tags = {

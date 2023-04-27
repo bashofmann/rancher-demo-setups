@@ -6,14 +6,6 @@ ssh -o StrictHostKeyChecking=no ec2-user@$IP0 sudo mkdir -p /etc/rancher/rke2
 ssh -o StrictHostKeyChecking=no ec2-user@$IP1 sudo mkdir -p /etc/rancher/rke2
 ssh -o StrictHostKeyChecking=no ec2-user@$IP2 sudo mkdir -p /etc/rancher/rke2
 
-ssh -o StrictHostKeyChecking=no ec2-user@$IP0 sudo mkdir -p /var/lib/rancher/rke2/server/manifests
-ssh -o StrictHostKeyChecking=no ec2-user@$IP1 sudo mkdir -p /var/lib/rancher/rke2/server/manifests
-ssh -o StrictHostKeyChecking=no ec2-user@$IP2 sudo mkdir -p /var/lib/rancher/rke2/server/manifests
-
-dd if=rke2-ingress-nginx-config.yaml | ssh -o StrictHostKeyChecking=no ec2-user@$IP0 sudo dd of=/var/lib/rancher/rke2/server/manifests/rke2-ingress-nginx-config.yaml
-dd if=rke2-ingress-nginx-config.yaml | ssh -o StrictHostKeyChecking=no ec2-user@$IP1 sudo dd of=/var/lib/rancher/rke2/server/manifests/rke2-ingress-nginx-config.yaml
-dd if=rke2-ingress-nginx-config.yaml | ssh -o StrictHostKeyChecking=no ec2-user@$IP2 sudo dd of=/var/lib/rancher/rke2/server/manifests/rke2-ingress-nginx-config.yaml
-
 dd if=rke2_config_initial.yaml | ssh -o StrictHostKeyChecking=no ec2-user@$IP0 sudo dd of=/etc/rancher/rke2/config.yaml
 dd if=rke2_config_additional.yaml | ssh -o StrictHostKeyChecking=no ec2-user@$IP1 sudo dd of=/etc/rancher/rke2/config.yaml
 dd if=rke2_config_additional.yaml | ssh -o StrictHostKeyChecking=no ec2-user@$IP2 sudo dd of=/etc/rancher/rke2/config.yaml
@@ -21,9 +13,9 @@ dd if=rke2_config_additional.yaml | ssh -o StrictHostKeyChecking=no ec2-user@$IP
 ssh -o StrictHostKeyChecking=no ec2-user@$IP0 curl -sfL https://get.rke2.io --output install_rke2.sh
 ssh -o StrictHostKeyChecking=no ec2-user@$IP1 curl -sfL https://get.rke2.io --output install_rke2.sh
 ssh -o StrictHostKeyChecking=no ec2-user@$IP2 curl -sfL https://get.rke2.io --output install_rke2.sh
-ssh -o StrictHostKeyChecking=no ec2-user@$IP0 sudo INSTALL_RKE2_CHANNEL=v1.23 bash install_rke2.sh
-ssh -o StrictHostKeyChecking=no ec2-user@$IP1 sudo INSTALL_RKE2_CHANNEL=v1.23 bash install_rke2.sh
-ssh -o StrictHostKeyChecking=no ec2-user@$IP2 sudo INSTALL_RKE2_CHANNEL=v1.23 bash install_rke2.sh
+ssh -o StrictHostKeyChecking=no ec2-user@$IP0 sudo INSTALL_RKE2_CHANNEL=v1.24 bash install_rke2.sh
+ssh -o StrictHostKeyChecking=no ec2-user@$IP1 sudo INSTALL_RKE2_CHANNEL=v1.24 bash install_rke2.sh
+ssh -o StrictHostKeyChecking=no ec2-user@$IP2 sudo INSTALL_RKE2_CHANNEL=v1.24 bash install_rke2.sh
 
 ssh -o StrictHostKeyChecking=no ec2-user@$IP0 sudo systemctl enable rke2-server.service
 ssh -o StrictHostKeyChecking=no ec2-user@$IP0 sudo systemctl start rke2-server.service
