@@ -45,7 +45,7 @@ data "aws_ami" "opensuse" {
 
   filter {
     name   = "name"
-    values = ["openSUSE-Leap-15-3-*"]
+    values = ["openSUSE-Leap-15.4*"]
   }
 
   filter {
@@ -59,17 +59,17 @@ data "aws_ami" "opensuse" {
   }
 }
 
-data "aws_ami" "rhel" {
-  most_recent = true
-  owners      = ["309956199498"] # RedHat
-
-  filter {
-    name   = "name"
-    values = ["RHEL-8.3_HVM-*-x86_64-0-Hourly2-GP2"]
-  }
-
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-}
+#data "aws_ami" "rhel" {
+#  most_recent = true
+#  owners      = ["309956199498"] # RedHat
+#
+#  filter {
+#    name   = "name"
+#    values = ["RHEL-8.3_HVM-*-x86_64-0-Hourly2-GP2"]
+#  }
+#
+#  filter {
+#    name   = "virtualization-type"
+#    values = ["hvm"]
+#  }
+#}
