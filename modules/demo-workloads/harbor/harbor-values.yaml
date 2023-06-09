@@ -10,3 +10,6 @@ expose:
 
 notary:
   enabled: false
+
+updateStrategy:
+  type: Recreate

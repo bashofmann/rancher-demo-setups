@@ -17,3 +17,23 @@ data "aws_ami" "sles" {
     values = ["ebs"]
   }
 }
+
+data "aws_ami" "opensuse" {
+  owners      = ["679593333241"]
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["openSUSE-Leap-15.4*"]
+  }
+
+  filter {
+    name   = "architecture"
+    values = ["x86_64"]
+  }
+
+  filter {
+    name   = "root-device-type"
+    values = ["ebs"]
+  }
+}

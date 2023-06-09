@@ -45,6 +45,10 @@ install-cert-manager:
 	cat cert-manager/clusterissuer.yaml | envsubst | kubectl apply -f -
 	cat cert-manager/credentials-secret.yaml | envsubst | kubectl apply -f -
 
+install-cert-manage-http:
+	helm upgrade --install cert-manager jetstack/cert-manager --namespace cert-manager --version v1.7.1 --set installCRDs=true --wait --create-namespace
+	cat cert-manager/clusterissuer-http.yaml | kubectl apply -f -
+
 install-external-dns:
 	helm upgrade --install external-dns bitnami/external-dns --namespace=external-dns --version 4.5.1 -f external-dns/values.yaml --set digitalocean.apiToken=$(DIGITALOCEAN_TOKEN) --create-namespace
 
@@ -120,15 +124,41 @@ install-gitlab:
 
 install-neuvector:
 	kubectl create namespace neuvector || true
-	kubectl apply -f neuvector/regcred.yaml
-	helm upgrade --install neuvector --namespace neuvector neuvector/core --create-namespace -f neuvector/values.yaml -f neuvector/license.yaml --version 1.8.9
+	#kubectl apply -f neuvector/regcred.yaml
+	helm upgrade --install neuvector --namespace cattle-neuvector-system neuvector/core --create-namespace -f neuvector/values.yaml -f neuvector/license.yaml --version 2.2.0-b1
 	kubectl -n neuvector rollout status deployment neuvector-controller-pod
 	kubectl -n neuvector rollout status deployment neuvector-manager-pod
 	kubectl -n neuvector rollout status deployment neuvector-scanner-pod
 	kubectl -n neuvector rollout status daemonset neuvector-enforcer-pod
 	bash neuvector/configure.sh
 
+install-neuvector-federated:
+	kubectl create namespace neuvector || true
+	kubectl apply -f neuvector/regcred.yaml
+	helm upgrade --install neuvector --namespace neuvector neuvector/core --create-namespace -f neuvector/values-federated.yaml -f neuvector/license.yaml --version 1.8.9
+#	kubectl -n neuvector rollout status deployment neuvector-controller-pod
+#	kubectl -n neuvector rollout status deployment neuvector-manager-pod
+#	kubectl -n neuvector rollout status deployment neuvector-scanner-pod
+#	kubectl -n neuvector rollout status daemonset neuvector-enforcer-pod
+	bash neuvector/configure.sh
+
 troubleshoot-network:
 	kubectl apply -f network-debugging
 	kubectl rollout status daemonset -n default overlaytest
 	echo "=> Start network overlay test"; kubectl -n default get pods -l name=overlaytest -o jsonpath='{range .items[*]}{@.metadata.name}{" "}{@.spec.nodeName}{"\n"}{end}' | while read spod shost; do kubectl -n default get pods -l name=overlaytest -o jsonpath='{range .items[*]}{@.status.podIP}{" "}{@.spec.nodeName}{"\n"}{end}' | while read tip thost; do kubectl -n default --request-timeout='10s' exec $spod -- /bin/sh -c "ping -c2 $tip > /dev/null 2>&1"; RC=$?; if [ $RC -ne 0 ]; then echo $shost cannot reach $thost; fi; done; done; echo "=> End network overlay test"
+
+install-opni:
+	helm repo add opni https://raw.githubusercontent.com/rancher/opni/charts-repo
+	helm -n opni upgrade --install --create-namespace opni-crd opni/opni-crd
+	helm -n opni upgrade --install opni opni/opni -f opni/values.yaml
+	kubectl apply -f opni/navlink.yaml
+	kubectl apply -f cert-manager/clusterissuer-http.yaml
+	#kubectl apply -f opni/ingress-opni.yaml
+	kubectl apply -f opni/opni-np-svc.yaml
+	kubectl apply -f opni/ingress-grafana.yaml
+	kubectl apply -f opni/ingress-logs.yaml
+
+
+
+
+

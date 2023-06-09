@@ -1,26 +1,21 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")"
 
-API_URL=https://localhost:10443
-ADMIN_PASSWORD="$(sed -n 's/.*Password: \(.*\)/\1/p' license.yaml)"
+API_URL=""
+ADMIN_PASSWORD="admin"
 
-kubectl port-forward -n neuvector svc/neuvector-svc-controller-api 10443 &
-PID=$!
-
-# Wait until port-forwarded finished
-sleep 5
-
-# Log in
-TOKEN_JSON=$(curl -k -H "Content-Type: application/json" -d "{\"password\":{\"username\":\"admin\",\"password\":\"${ADMIN_PASSWORD}\"}}" "${API_URL}/v1/auth")
+TOKEN_JSON=$(curl -H "Content-Type: application/json" -d "{\"password\":{\"username\":\"admin\",\"password\":\"${ADMIN_PASSWORD}\"}}" "${API_URL}/v1/auth")
 TOKEN=$(echo ${TOKEN_JSON} | jq -r '.token.token')
 
-# Accept EULA
-curl -s -k -H 'Content-Type: application/json' -H "X-Auth-Token: ${TOKEN}" -d '{"eula":{"accepted":true}}' "${API_URL}/v1/eula"
+curl -k -H "Content-Type: application/json" -H "X-Auth-Token: $TOKEN" "${API_URL}/v1/scan/scanner"
 
-# Set up Auto-Scan
-curl -s -k -H 'Content-Type: application/json' -H "X-Auth-Token: ${TOKEN}" -X PATCH -d '{"config":{"auto_scan":true}}' "${API_URL}/v1/scan/config"
+# Get all federated clusters
+joint_cluster_ids=$(curl -H 'Content-Type: application/json' -H "X-Auth-Token: ${TOKEN}" -X GET "${API_URL}/v1/fed/member" | jq -r '.joint_clusters[].id')
+
+# For each cluster get a list of workloads including a scan summery
+for id in $joint_cluster_ids; do
+  curl -H 'Content-Type: application/json' -H "X-Auth-Token: ${TOKEN}" -X GET "${API_URL}/v1/fed/cluster/${id}/v1/workload?view=pod" --compressed | jq '.'
+done
 
 # Log out
-curl -s -k -H 'Content-Type: application/json' -H "X-Auth-Token: ${TOKEN}" -X DELETE "${API_URL}/v1/auth"
-
-kill $PID
+curl -s -H 'Content-Type: application/json' -H "X-Auth-Token: ${TOKEN}" -X DELETE "${API_URL}/v1/auth"

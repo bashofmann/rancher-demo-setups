@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: logs
+  namespace: opni
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http-prod
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+spec:
+  tls:
+    - hosts:
+        - logs.plgrnd.be
+      secretName: logs-tls-secret
+  rules:
+  - host: logs.plgrnd.be
+    http:
+      paths:
+      - backend:
+          service:
+            name: opni-opensearch-svc-dashboards
+            port:
+              number: 5601
+        path: /
+        pathType: Prefix

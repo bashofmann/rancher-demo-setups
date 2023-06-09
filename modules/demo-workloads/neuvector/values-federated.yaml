@@ -1,14 +1,5 @@
 controller:
   replicas: 1
-  ingress:
-    enabled: true
-    host:  neuvector-api.cluster-one.plgrnd.be
-    path: "/"
-    annotations:
-      cert-manager.io/cluster-issuer: letsencrypt-http-prod
-      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
-    tls: true
-    secretName: neuvector-api-tls-secret
   apisvc:
     type: ClusterIP
   ranchersso:
@@ -17,19 +8,19 @@ controller:
     enabled: true
     data:
       sysinitcfg.yaml:
-        Cluster_Name: cluster-one
+        Cluster_Name: cluster-two
   federation:
-    mastersvc:
+    managedsvc:
       type: ClusterIP
       ingress:
         enabled: true
-        host:  neuvector-master.cluster-one.plgrnd.be
+        host:  neuvector-managed.cluster-two.plgrnd.be
         path: "/"
         annotations:
           cert-manager.io/cluster-issuer: letsencrypt-http-prod
           nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
         tls: true
-        secretName: neuvector-master-tls-secret
+        secretName: neuvector-managed-tls-secret
 
 cve:
   scanner:

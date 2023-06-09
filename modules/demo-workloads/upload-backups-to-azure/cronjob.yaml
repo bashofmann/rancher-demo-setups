@@ -1,0 +1,78 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  namespace: kube-system
+  name: azure-credentials
+stringData:
+  AZ_SERVICE_PRINCIPAL: ...
+  AZ_CLIENT_SECRET: ...
+  AZ_TENANT: ...
+  AZ_STORAGE_ACCOUNT: ...
+  AZ_STORAGE_CONTAINER: ...
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: kube-system
+  name: upload-backup-script
+data:
+  upload-backup.sh: |
+    #!/usr/bin/env bash
+
+    set -e
+    
+    echo "Logging in as ${AZ_SERVICE_PRINCIPAL} in tenant ${AZ_TENANT}"
+    az login --service-principal -u ${AZ_SERVICE_PRINCIPAL} -p ${AZ_CLIENT_SECRET} --tenant ${AZ_TENANT}
+    echo "Using storage account ${AZ_STORAGE_ACCOUNT}, container ${AZ_STORAGE_CONTAINER}"
+    for backupfile in /snapshots/*; do
+      filename=$(basename ${backupfile})
+      echo "Uploading ${filename}"
+      az storage blob upload \
+         --account-name ${AZ_STORAGE_ACCOUNT} \
+         --container-name ${AZ_STORAGE_CONTAINER} \
+         --name ${filename} \
+         --file ${backupfile} \
+         --auth-mode login
+    done
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  namespace: kube-system
+  name: upload-backup
+spec:
+  schedule: 0 * * * *
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          restartPolicy: Never
+          tolerations:
+            - effect: NoExecute
+              operator: Exists
+            - effect: NoSchedule
+              operator: Exists
+          nodeSelector:
+            node-role.kubernetes.io/etcd: "true"
+          containers:
+            - name: upload-backup
+              image: mcr.microsoft.com/azure-cli:latest
+              command:
+                - bash
+                - /app/upload-backup.sh
+              volumeMounts:
+                - mountPath: /app
+                  name: script
+                - mountPath: /snapshots
+                  name: snapshots
+              envFrom:
+                - secretRef:
+                    name: azure-credentials
+          volumes:
+            - name: script
+              configMap:
+                name: upload-backup-script
+            - name: snapshots
+              hostPath:
+                path: /var/lib/rancher/rke2/server/db/snapshots
