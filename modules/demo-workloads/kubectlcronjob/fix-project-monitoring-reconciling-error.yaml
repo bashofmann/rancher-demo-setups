@@ -1,0 +1,89 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fix-project-monitoring
+  namespace: fix-project-monitoring
+data:
+  fix-project-monitoring.sh: |
+    #!/usr/bin/env bash
+    
+    set -e
+
+    namespaces=$(kubectl get namespaces -o name)
+
+    for namespace in $namespaces
+    do
+    	if [[ $namespace =~ ^namespace/cattle-project-p-[a-z0-9]+$ ]]; then
+    		namespace_name=$(echo -n $namespace | cut -d '/' -f 2)
+    		if kubectl get namespace "${namespace_name}-monitoring" &>/dev/null; then
+    			echo Project $namespace_name has a monitoring namespace
+    			if ! kubectl -n "${namespace_name}-monitoring" get rolebindings.rbac.authorization.k8s.io "${namespace_name}-mon-admin" &>/dev/null; then
+    				echo Project monitoring $namespace_name is missing the mon-admin role binding
+    				echo Removing project annotation from namespace
+    				projectId=$(kubectl get namespace cattle-project-p-pzrvn-monitoring -o jsonpath='{.metadata.annotations.field\.cattle\.io/projectId}')
+    				echo Project id is $projectId
+    				kubectl annotate namespace $namespace_name fied.cattle.io/projectId-
+    				echo Adding it again
+    				kubectl annotate namespace $namespace_name fied.cattle.io/projectId=${projectId}
+    			fi
+    		fi
+    	fi
+    done
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: fix-project-monitoring
+  namespace: fix-project-monitoring
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: fix-project-monitoring
+rules:
+  - apiGroups: [ "" ]
+    resources: [ "namespaces" ]
+    verbs: [ "get", "list", "post", "patch" ]
+  - apiGroups: [ "rbac.authorization.k8s.io" ]
+    resources: [ "rolebindings" ]
+    verbs: [ "get", "list" ]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: fix-project-monitoring
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: fix-project-monitoring
+subjects:
+  - kind: ServiceAccount
+    name: fix-project-monitoring
+    namespace: fix-project-monitoring
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: fix-project-monitoring
+  namespace: fix-project-monitoring
+spec:
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          serviceAccountName: fix-project-monitoring
+          containers:
+            - name: fix-project-monitoring
+              image: bitnami/kubectl:1.21.14
+              command:
+                - /bin/bash
+                - /scripts/fix-project-monitoring.sh
+              volumeMounts:
+                - mountPath: /scripts
+                  name: scripts
+          volumes:
+            - name: scripts
+              configMap:
+                name: fix-project-monitoring
+  schedule: "*/10 * * * *"
