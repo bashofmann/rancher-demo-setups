@@ -18,7 +18,7 @@ helm repo add rancher-prime https://charts.rancher.com/server-charts/prime
 
 helm upgrade --install rancher rancher-latest/rancher \
   --namespace cattle-system \
-  --version v2.7.3 \
+  --version v2.7.4 \
   --set hostname=rancher.plgrnd.be --create-namespace \
   --set ingress.tls.source=letsEncrypt
 

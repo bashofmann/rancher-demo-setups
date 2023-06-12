@@ -9,7 +9,7 @@ k3sup install \
   --user ec2-user \
   --cluster \
   --k3s-extra-args "--node-external-ip ${IP0}" \
-  --k3s-channel latest
+  --k3s-channel v1.24
 
 k3sup join \
   --ip $IP1 \
@@ -18,18 +18,18 @@ k3sup join \
   --server-ip $IP0 \
   --server \
   --k3s-extra-args "--node-external-ip ${IP1}" \
-  --k3s-channel latest
+  --k3s-channel v1.24
 
-k3sup join \
-  --ip $IP2 \
-  --user ec2-user \
-  --server-user ec2-user \
-  --server-ip $IP0 \
-  --server \
-  --k3s-extra-args "--node-external-ip ${IP2}" \
-  --k3s-channel latest
+#k3sup join \
+#  --ip $IP2 \
+#  --user ec2-user \
+#  --server-user ec2-user \
+#  --server-ip $IP0 \
+#  --server \
+#  --k3s-extra-args "--node-external-ip ${IP2}" \
+#  --k3s-channel v1.24
 
-mv kubeconfig kubeconfig_rancher
+#mv kubeconfig kubeconfig_rancher
 #
 #export KUBECONFIG=kubeconfig_rancher
 #

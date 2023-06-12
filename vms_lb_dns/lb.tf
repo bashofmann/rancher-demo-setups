@@ -126,6 +126,14 @@ resource "digitalocean_record" "keycloak" {
   ttl    = 60
 }
 
+resource "digitalocean_record" "demo" {
+  domain = data.digitalocean_domain.zone.name
+  type   = "CNAME"
+  name   = "*.demo"
+  value  = "${aws_elb.rancher-server-lb.dns_name}."
+  ttl    = 60
+}
+
 resource "aws_elb" "kubernetes-lb" {
   name            = "${var.prefix}-kubernetes-lb"
   subnets         = [aws_subnet.eu-central-1a-public.id]
