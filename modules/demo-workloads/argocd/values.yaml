@@ -1,0 +1,36 @@
+redis-ha:
+  enabled: true
+
+controller:
+  replicas: 1
+
+server:
+  ingress:
+    enabled: true
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-http-prod
+      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    hosts:
+      - argocd.plgrnd.be
+    tls:
+      - secretName: argocd-tls
+        hosts:
+         - argocd.plgrnd.be
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+
+repoServer:
+  autoscaling:
+    enabled: true
+    minReplicas: 2
+
+applicationSet:
+  replicaCount: 2
+
+configs:
+  cm:
+    url: argocd.plgrnd.be
+    exec.enabled: true
+

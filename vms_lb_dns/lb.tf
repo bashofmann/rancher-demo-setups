@@ -110,6 +110,14 @@ resource "digitalocean_record" "grafana" {
   ttl    = 60
 }
 
+resource "digitalocean_record" "argocd" {
+  domain = data.digitalocean_domain.zone.name
+  type   = "CNAME"
+  name   = "argocd"
+  value  = "${aws_elb.rancher-server-lb.dns_name}."
+  ttl    = 60
+}
+
 resource "digitalocean_record" "logs" {
   domain = data.digitalocean_domain.zone.name
   type   = "CNAME"

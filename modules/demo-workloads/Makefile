@@ -84,9 +84,8 @@ install-loki:
 	kubectl rollout restart deployment -n cattle-monitoring-system rancher-monitoring-grafana
 
 install-argocd:
-	kubectl create namespace argocd || true
-	kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
-	cat argocd/ingress.yaml | envsubst | kubectl apply -f -
+	helm repo add argo https://argoproj.github.io/argo-helm
+	helm upgrade --install argocd argo/argo-cd --namespace argocd -f argocd/values.yaml --create-namespace
 
 install-nexus:
 	helm upgrade --install nexus oteemo/sonatype-nexus --namespace nexus --version 2.1.0 -f nexus/values.yaml --create-namespace
